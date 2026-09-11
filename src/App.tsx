@@ -1,0 +1,215 @@
+import { useState, useEffect } from 'react';
+import { Header } from './components/Header';
+import { Hero } from './components/Hero';
+import { WidmarkCalculator } from './components/WidmarkCalculator';
+import { FormulaGuide } from './components/FormulaGuide';
+import { LegalLimitsTable } from './components/LegalLimitsTable';
+import { DeviceComparison } from './components/DeviceComparison';
+import { SeoGlossary } from './components/SeoGlossary';
+import { FaqSection } from './components/FaqSection';
+import { StickyMobileBar } from './components/StickyMobileBar';
+import { Footer } from './components/Footer';
+import { Impressum } from './components/Impressum';
+import { Datenschutz } from './components/Datenschutz';
+import { ScrollToTop } from './components/ScrollToTop';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+
+export function App() {
+  const [currentView, setCurrentView] = useState<'home' | 'impressum' | 'datenschutz' | 'rechner-embed'>('home');
+  const [embedCopied, setEmbedCopied] = useState(false);
+
+  // Handle URL path changes (e.g. /impressum, /datenschutz, /rechner-embed)
+  useEffect(() => {
+    const handleLocation = () => {
+      const path = window.location.pathname.toLowerCase();
+      if (path === '/impressum' || path === '/impressum.html') {
+        setCurrentView('impressum');
+      } else if (path === '/datenschutz' || path === '/datenschutz.html') {
+        setCurrentView('datenschutz');
+      } else if (path === '/rechner-embed' || path === '/rechner-embed.html') {
+        setCurrentView('rechner-embed');
+      } else {
+        setCurrentView('home');
+      }
+    };
+
+    handleLocation();
+    window.addEventListener('popstate', handleLocation);
+    return () => window.removeEventListener('popstate', handleLocation);
+  }, []);
+
+  useEffect(() => {
+    // Track SPA route changes in Vercel Analytics
+    if (typeof window !== 'undefined') {
+      const w = window as unknown as { va?: (event: string, data: { route: string }) => void };
+      if (w.va) {
+        w.va('pageview', { route: currentView });
+      }
+    }
+  }, [currentView]);
+
+  const navigate = (view: string) => {
+    if (view === 'impressum') {
+      window.history.pushState({}, '', '/impressum');
+      setCurrentView('impressum');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (view === 'datenschutz') {
+      window.history.pushState({}, '', '/datenschutz');
+      setCurrentView('datenschutz');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (view === 'rechner-embed') {
+      window.history.pushState({}, '', '/rechner-embed');
+      setCurrentView('rechner-embed');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.history.pushState({}, '', '/');
+      setCurrentView('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const scrollTo = (id: string) => {
+    if (currentView !== 'home') {
+      window.history.pushState({}, '', '/');
+      setCurrentView('home');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const copyEmbedCode = () => {
+    const code = `<iframe src="https://widmarkformel.de/rechner-embed" width="100%" height="780" frameborder="0" style="border:none; border-radius:16px; overflow:hidden; max-width:860px; box-shadow:0 4px 20px rgba(0,0,0,0.08);" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`;
+    navigator.clipboard.writeText(code);
+    setEmbedCopied(true);
+    setTimeout(() => setEmbedCopied(false), 2500);
+  };
+
+  // Standalone embed view for iframes
+  if (currentView === 'rechner-embed') {
+    return (
+      <div className="min-h-screen bg-slate-50 p-2 sm:p-4 text-slate-900 flex flex-col justify-between">
+        <WidmarkCalculator />
+        <div className="text-center py-3 text-xs font-semibold text-slate-500 border-t border-slate-200 mt-6 bg-white/80 rounded-xl p-3 shadow-xs">
+          Wissenschaftlicher Promillerechner nach Widmark (1932) &amp; Watson (1980) · Bereitgestellt von{' '}
+          <a
+            href="https://widmarkformel.de"
+            target="_blank"
+            rel="noopener"
+            className="text-amber-700 hover:text-amber-800 font-extrabold hover:underline"
+          >
+            widmarkformel.de
+          </a>
+        </div>
+        <ScrollToTop />
+        <Analytics />
+        <SpeedInsights />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      {/* Header with Navigation */}
+      <Header currentView={currentView} onNavigate={navigate} />
+
+      {/* Main Content Area */}
+      <main className="flex-1">
+        {currentView === 'impressum' ? (
+          <Impressum onBack={() => navigate('home')} />
+        ) : currentView === 'datenschutz' ? (
+          <Datenschutz onBack={() => navigate('home')} />
+        ) : (
+          <>
+            <Hero onScrollToCalculator={() => scrollTo('rechner')} />
+            <WidmarkCalculator />
+
+            {/* Embed Widget Box (Backlink Magnet) */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-16">
+              <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+                  <div>
+                    <span className="text-xs font-black uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">
+                      Kostenloses Website-Widget
+                    </span>
+                    <h3 className="text-lg font-bold text-slate-950 mt-1">
+                      Promillerechner auf Ihrer Website einbinden
+                    </h3>
+                    <p className="text-xs text-slate-500 font-medium">
+                      Ideal für Fahrschulen, Ratgeber-Blogs, Anwaltskanzleien und Informationsportale.
+                    </p>
+                  </div>
+                  <button
+                    onClick={copyEmbedCode}
+                    className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 shrink-0"
+                  >
+                    <span>{embedCopied ? '✓ HTML-Code kopiert!' : 'Code kopieren'}</span>
+                  </button>
+                </div>
+                <div className="mt-4 bg-slate-900 text-slate-300 p-3.5 rounded-xl font-mono text-xs overflow-x-auto select-all">
+                  <code>{`<iframe src="https://widmarkformel.de/rechner-embed" width="100%" height="780" frameborder="0" style="border:none;border-radius:16px;overflow:hidden;max-width:860px;" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`}</code>
+                </div>
+              </div>
+            </div>
+
+            <FormulaGuide />
+            <LegalLimitsTable />
+            <DeviceComparison />
+
+            {/* E-E-A-T Editorial Trust Box */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-slate-100">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-lg shadow-md shrink-0">
+                      WF
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-black text-slate-950 text-base">Fachredaktion widmarkformel.de</span>
+                        <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-black rounded-full uppercase tracking-wider border border-emerald-200">
+                          Geprüfter Stand: September 2026
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-500 font-medium mt-0.5">
+                        Wissenschaftliche Validierung nach Erik M. P. Widmark (1932), Watson et al. (1980) &amp; StVG/StGB-Vorgaben
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 self-start sm:self-auto">
+                    <span>Forensisch geprüft</span>
+                  </div>
+                </div>
+                <div className="pt-5 text-xs text-slate-600 leading-relaxed font-medium">
+                  Unsere Fachredaktion analysiert physikalische und biochemische Abbaukurven auf Basis internationaler toxikologischer Standards. Alle rechtlichen Schwellenwerte (§ 24a StVG, § 316 StGB) entsprechen der geltenden Rechtsprechung deutscher Oberlandesgerichte und des Bundesgerichtshofs (BGH).
+                </div>
+              </div>
+            </div>
+
+            <SeoGlossary />
+            <FaqSection />
+            <StickyMobileBar 
+              onScrollToCalculator={() => scrollTo('rechner')} 
+              onScrollToLimits={() => scrollTo('promillegrenzen')} 
+            />
+          </>
+        )}
+      </main>
+
+      {/* Legal & Informative Footer */}
+      <Footer onNavigate={navigate} />
+
+      {/* Scroll to Top Button & Analytics */}
+      <ScrollToTop />
+      <Analytics />
+      <SpeedInsights />
+    </div>
+  );
+}
+
+export default App;
