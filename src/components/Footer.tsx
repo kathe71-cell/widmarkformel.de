@@ -129,16 +129,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Anbieter &amp; Rechtliches
             </h3>
             <div className="space-y-2 text-xs text-slate-400">
-              <p className="text-slate-300 font-medium">
-                Jens Kathe<br />
-                Hansastraße 6<br />
-                34119 Kassel<br />
-                Deutschland
-              </p>
-              <p>
-                E-Mail: <a href="mailto:jens@kathe.org" className="text-amber-400 hover:underline">jens@kathe.org</a><br />
-                Telefon: +49 178 6652623
-              </p>
+              <p className="text-slate-300 font-medium">Unabhängiges Fachportal zur Alkohol- und Promilleberechnung.<br />Kleinunternehmer nach § 19 UStG.</p><p className="text-[11px] text-slate-500">Vollständige Betreiberangaben entnehmen Sie bitte dem Impressum.</p>
               <p className="text-[11px] text-slate-500">
                 Kleinunternehmer nach § 19 UStG.
               </p>

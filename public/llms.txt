@@ -1,0 +1,22 @@
+# widmarkformel.de – Wissenschaftlicher Promillerechner & BAK-Portal
+
+> Präzise Berechnung der Blutalkoholkonzentration (BAK) nach der Widmark-Formel (Erik M. P. Widmark, 1932) unter Berücksichtigung von Resorptionsdefiziten und physiologischen Reduktionsfaktoren.
+
+## Mathematische Formel
+- `c = A / (m * r)`
+- `c`: Blutalkoholkonzentration in Promille (g/kg)
+- `A`: Aufgenommene Masse reinen Ethanols in Gramm (`Volumen in ml * Vol.-% * 0,8 / 100`)
+- `m`: Körpergewicht in kg
+- `r`: Reduktionsfaktor (Männer ca. 0,68–0,70, Frauen ca. 0,55–0,60; alternativ nach Seidl et al. mit BMI-Korrektur)
+- **Stündlicher Abbau (β60):** Durchschnittlich 0,10 bis 0,15 ‰ pro Stunde nach Abschluss der Resorptionsphase.
+
+## Gesetzliche Grenzwerte (StVG & StGB)
+- **0,00 ‰:** Fahranfänger in der Probezeit & Personen unter 21 Jahren (§ 24c StVG).
+- **0,50 ‰:** Ordnungswidrigkeit (§ 24a StVG) – 500 € Bußgeld, 2 Punkte, 1 Monat Fahrverbot.
+- **1,10 ‰:** Absolute Fahruntüchtigkeit (§ 316 StGB) – Straftat, Führerscheinentzug.
+
+## Interaktive Tools
+- **/rechner-embed:** Einbettbarer Widmark-Rechner mit Getränkekatalog, Resorptionskurve und prognostiziertem Abbauverlauf.
+
+## Betreiberangaben
+- Unabhängiges Fachportal. Betreiberdaten nach § 5 DDG unter /impressum.

@@ -259,6 +259,23 @@
       ]
     }
     </script>
+      <script type="speculationrules">
+    {
+      "prefetch": [
+        {
+          "source": "document",
+          "where": {
+            "and": [
+              { "href_matches": "/*" },
+              { "not": { "href_matches": ["/api/*", "/*\\?(.+)"] } },
+              { "not": { "selector_matches": "a[rel~=\"nofollow\"]" } }
+            ]
+          },
+          "eagerness": "conservative"
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-amber-200 selection:text-amber-900">
     <div id="root"></div>

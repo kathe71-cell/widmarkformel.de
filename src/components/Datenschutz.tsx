@@ -51,14 +51,7 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
               <p>
                 Verantwortlicher für die Datenverarbeitung auf dieser Website im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:
               </p>
-              <div className="mt-3 p-4 rounded-xl bg-slate-50 border border-slate-200 font-medium text-slate-900">
-                Jens Kathe<br />
-                Hansastraße 6<br />
-                34119 Kassel<br />
-                Deutschland<br />
-                E-Mail: jens@kathe.org<br />
-                Telefon: +49 178 6652623
-              </div>
+              <div className="mt-3 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">Verantwortlicher im Sinne der DSGVO ist der Betreiber dieser Website. Die vollständigen Kontaktdaten und Angaben zum Verantwortlichen finden Sie im <a href="/impressum" className="text-amber-700 font-semibold hover:underline">Impressum</a>.</div>
             </section>
 
             {/* 3. Hosting & Server-Log-Dateien */}
