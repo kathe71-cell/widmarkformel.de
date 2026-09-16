@@ -15,10 +15,36 @@ import {
   Activity, 
   Car,
   Flame,
-  Info
+  Info,
+  Copy,
+  Check
 } from 'lucide-react';
 
 export const WidmarkCalculator: React.FC = () => {
+  const [copiedShareLink, setCopiedShareLink] = useState(false);
+
+  React.useEffect(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const w = p.get('w');
+      const g = p.get('g');
+      if (w || g) {
+        setProfile(prev => ({
+          ...prev,
+          weightKg: w ? Math.max(30, Math.min(200, Number(w))) : prev.weightKg,
+          gender: (g === 'female' || g === 'male') ? g : prev.gender,
+        }));
+      }
+    } catch {}
+  }, []);
+
+  const shareResultLink = () => {
+    const url = `${window.location.origin}${window.location.pathname}?w=${profile.weightKg}&g=${profile.gender}`;
+    navigator.clipboard.writeText(url);
+    setCopiedShareLink(true);
+    setTimeout(() => setCopiedShareLink(false), 2500);
+  };
+
   // State for user profile
   const [profile, setProfile] = useState<UserProfile>({
     gender: 'male',
@@ -512,6 +538,15 @@ export const WidmarkCalculator: React.FC = () => {
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
                   Modellrechnung-Ergebnis *
                 </span>
+                <button
+                  type="button"
+                  onClick={shareResultLink}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition-all active:scale-95"
+                  title="Berechnung teilen"
+                >
+                  {copiedShareLink ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5 text-amber-800" />}
+                  <span>{copiedShareLink ? 'Link kopiert!' : 'Ergebnis teilen'}</span>
+                </button>
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
                   Live kalkuliert
                 </span>
