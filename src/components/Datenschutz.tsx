@@ -168,8 +168,8 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
                     >
                       Google Limited Ads (LTD)
                     </a>{' '}
-                    werden in diesem Fall sämtliche werbebezogenen Zugriffe auf Cookies oder den lokalen Speicher (Local Storage) des Endgeräts vollständig unterbunden. Es werden <strong className="text-slate-800">keine Werbekennungen auf Ihrem Gerät gespeichert oder ausgelesen</strong>.<br />
-                    <strong>Auslieferung:</strong> Die Anzeigenauswahl erfolgt strikt kontextuell auf Basis der aktuell aufgerufenen Seite (URL, Inhaltsbegriffe) sowie der technisch zwingenden IP-Übermittlung zur serverseitigen Datenübertragung und groben Länderebene. Persistentes nutzerübergreifendes Tracking und Profilbildung sind im LTD-Modus technisch deaktiviert.
+                    kann Google bei verweigerter Einwilligung eingeschränkte Anzeigen ausliefern. Je nach aktivierter AdSense-Konfiguration können dabei Cookies und lokale Speicherzugriffe zur Betrugsprävention und Erkennung ungültigen Traffics (z. B. via Local Storage oder Shared Storage API) verbleiben. Eine Personalisierung der Anzeigen findet in diesem Modus nicht statt.<br />
+                    <strong>Auslieferung:</strong> Die Anzeigenauswahl erfolgt kontextbezogen auf Basis des Inhalts der besuchten Seite sowie der technisch erforderlichen IP-Adresse zur Datenübertragung. Nutzerbezogene Profilbildung und geräteübergreifendes Targeting sind im LTD-Modus deaktiviert.
                   </p>
                 </div>
 
