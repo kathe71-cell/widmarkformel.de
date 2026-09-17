@@ -43,13 +43,13 @@ export const StickyMobileBar: React.FC<StickyMobileBarProps> = ({
           className="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2 border border-amber-600 active:scale-95 transition-all"
         >
           <Calculator className="w-4 h-4" />
-          <span>BAK berechnen *</span>
+          <span>BAK berechnen</span>
           <ArrowUpRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
       <div className="text-[10px] text-center text-slate-500 mt-1 font-medium">
-        * Modellrechnung. Keine Rechts- oder Haftungsübernahme für Fahrtüchtigkeit.
+        Modellrechnung. Keine Gewähr für individuelle Fahrtüchtigkeit.
       </div>
     </div>
   );

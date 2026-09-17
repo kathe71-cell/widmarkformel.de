@@ -133,7 +133,7 @@ export const FormulaGuide: React.FC = () => {
         </div>
 
         {/* Resorption Deficit & Watson Comparison */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           
           {/* Resorption Deficit Box */}
           <div className="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200">
@@ -144,44 +144,46 @@ export const FormulaGuide: React.FC = () => {
               </h4>
             </div>
             <p className="text-sm text-slate-700 leading-relaxed">
-              Nicht der gesamte getrunkene Alkohol erreicht die Blutbahn. Ein messbarer Anteil wird bereits in der Magenschleimhaut und beim ersten Durchqueren der Leber (First-Pass-Effekt) abgebaut oder unresorbiert über Lunge und Schweiß ausgeschieden.
+              Nicht das gesamte getrunkene Ethanol erreicht die Blutbahn. Ein messbarer Anteil wird bereits in der Magenschleimhaut und beim ersten Leberdurchlauf (First-Pass-Effekt) abgebaut oder unresorbiert ausgeschieden. 
+              <strong>Wichtig:</strong> Die Prozentwerte (10 %, 20 %, 30 %) sind empirische Schätzkorridore für Populationen, keine unveränderlichen individuellen Naturkonstanten.
             </p>
             <ul className="mt-4 space-y-2 text-xs text-slate-800 font-medium">
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                <span><strong>Nüchterner Magen:</strong> ca. 10 % Resorptionsdefizit (schnelle Anflutung).</span>
+                <span><strong>Nüchterner Magen:</strong> ca. 10 % Defizit (rasche Magenpassage in das Duodenum).</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                <span><strong>Normale Mahlzeit:</strong> ca. 20 % Resorptionsdefizit (Standardannahme).</span>
+                <span><strong>Normale Mischkost:</strong> ca. 20 % Defizit (forensische Standardannahme).</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                <span><strong>Reichhaltige / fettige Nahrung:</strong> bis zu 30 % Resorptionsdefizit (stark verzögerte Resorption).</span>
+                <span><strong>Fett- / proteinreiche Nahrung:</strong> bis zu 30 % Defizit (verzögerte Magenentleerung).</span>
               </li>
             </ul>
           </div>
 
-          {/* Forensic Comparison Box */}
+          {/* Model Comparison & Application Limits */}
           <div className="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200">
             <div className="flex items-center gap-2 mb-3">
               <Cpu className="w-5 h-5 text-slate-900" />
               <h4 className="font-black text-slate-950 text-lg">
-                Widmark vs. Watson vs. Seidl
+                Watson-Formel &amp; Anwendungsgrenzen
               </h4>
             </div>
             <div className="space-y-3 text-xs text-slate-700 leading-relaxed">
               <div className="p-3 bg-white rounded-xl border border-slate-200">
-                <strong className="text-slate-900 font-bold block mb-1">Widmark (1932):</strong>
-                Verwendet feste Koeffizienten (0,70 / 0,60). Sehr einfach, aber bei hohem Körperfettanteil unpräzise.
+                <strong className="text-slate-900 font-bold block mb-1">Watson-Gleichung (1980):</strong>
+                Ermittelt das Gesamtkörperwasser (TBW in Liter): <br />
+                <code className="font-mono text-[11px] block mt-1 bg-slate-50 p-1.5 rounded border border-slate-200">
+                  TBW_m = 2,447 - 0,09516·Alter + 0,1074·Größe(cm) + 0,3362·Gewicht(kg)<br />
+                  TBW_w = -2,097 + 0,1069·Größe(cm) + 0,2466·Gewicht(kg)<br />
+                  r = TBW / (0,8 · Gewicht)  [0,8 = Wasseranteil im Blut]
+                </code>
               </div>
               <div className="p-3 bg-white rounded-xl border border-slate-200">
-                <strong className="text-slate-900 font-bold block mb-1">Watson et al. (1980):</strong>
-                Berechnet das Körperwasser (<em className="italic">Total Body Water</em>) anhand von Alter, Größe und Gewicht. Goldstandard moderner Rechner.
-              </div>
-              <div className="p-3 bg-white rounded-xl border border-slate-200">
-                <strong className="text-slate-900 font-bold block mb-1">Seidl et al. (2000):</strong>
-                Deutsche gerichtsmedizinische Validierung für europäische Populationen mit Geschlechter- und Body-Mass-Index-Differenzierung.
+                <strong className="text-slate-900 font-bold block mb-1">Grenzen der Modellgültigkeit:</strong>
+                Die Formeln basieren auf standardisierten Stichproben. Bei extremem Body-Mass-Index (starke Adipositas oder Untergewicht), ausgeprägter Hypertrophie (Kraftsportler), Dehydratation oder Lebererkrankungen weichen reale Blutwerte deutlich vom Modell ab.
               </div>
             </div>
           </div>

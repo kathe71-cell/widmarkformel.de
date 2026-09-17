@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { WidmarkCalculator } from './components/WidmarkCalculator';
+import { EmbedCalculator } from './components/EmbedCalculator';
 import { FormulaGuide } from './components/FormulaGuide';
 import { LegalLimitsTable } from './components/LegalLimitsTable';
 import { DeviceComparison } from './components/DeviceComparison';
@@ -38,6 +39,37 @@ export function App() {
     window.addEventListener('popstate', handleLocation);
     return () => window.removeEventListener('popstate', handleLocation);
   }, []);
+
+  // Dynamic SEO metadata update for subpages
+  useEffect(() => {
+    let title = 'Widmark-Formel Rechner & Promilleabbau – BAK berechnen';
+    let desc = 'Wissenschaftlich fundierter Widmark-Formel Promillerechner mit Abbaukurve, Watson-Anpassung und aktuellen deutschen Grenzwerten (§ 24a StVG & StGB).';
+    let canonical = 'https://www.widmarkformel.de/';
+
+    if (currentView === 'impressum') {
+      title = 'Impressum – Gesetzliche Anbieterkennzeichnung | widmarkformel.de';
+      desc = 'Impressum und gesetzliche Anbieterkennzeichnung gemäß § 5 DDG und § 18 MStV für widmarkformel.de (Jens Kathe, Kassel).';
+      canonical = 'https://www.widmarkformel.de/impressum';
+    } else if (currentView === 'datenschutz') {
+      title = 'Datenschutzerklärung – DSGVO-Transparenz | widmarkformel.de';
+      desc = 'Datenschutzerklärung für widmarkformel.de: Lokale Promille-Berechnung im Browser, Hosting bei Vercel, Google AdSense und Datenschutzhinweise.';
+      canonical = 'https://www.widmarkformel.de/datenschutz';
+    } else if (currentView === 'rechner-embed') {
+      title = 'Widmark-Formel Promillerechner Widget – Kostenlos einbinden';
+      desc = 'Kompaktes, wissenschaftlich fundiertes Widmark-Promillerechner-Widget für Fahrschulen, Anwaltskanzleien und Informationsportale.';
+      canonical = 'https://www.widmarkformel.de/rechner-embed';
+    }
+
+    document.title = title;
+
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', canonical);
+    }
+  }, [currentView]);
 
   useEffect(() => {
     // Track SPA route changes in Vercel Analytics
@@ -84,29 +116,28 @@ export function App() {
   };
 
   const copyEmbedCode = () => {
-    const code = `<iframe src="https://widmarkformel.de/rechner-embed" width="100%" height="780" frameborder="0" style="border:none; border-radius:16px; overflow:hidden; max-width:860px; box-shadow:0 4px 20px rgba(0,0,0,0.08);" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`;
+    const code = `<iframe src="https://www.widmarkformel.de/rechner-embed" width="100%" height="680" frameborder="0" style="border:none; border-radius:16px; overflow:hidden; max-width:600px; width:100%; box-shadow:0 4px 20px rgba(0,0,0,0.06);" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://www.widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`;
     navigator.clipboard.writeText(code);
     setEmbedCopied(true);
     setTimeout(() => setEmbedCopied(false), 2500);
   };
 
-  // Standalone embed view for iframes
+  // Standalone compact embed view for iframes
   if (currentView === 'rechner-embed') {
     return (
-      <div className="min-h-screen bg-slate-50 p-2 sm:p-4 text-slate-900 flex flex-col justify-between">
-        <WidmarkCalculator />
-        <div className="text-center py-3 text-xs font-semibold text-slate-500 border-t border-slate-200 mt-6 bg-white/80 rounded-xl p-3 shadow-xs">
-          Wissenschaftlicher Promillerechner nach Widmark (1932) &amp; Watson (1980) · Bereitgestellt von{' '}
+      <div className="min-h-screen bg-slate-100 p-2 sm:p-4 text-slate-900 flex flex-col justify-between">
+        <EmbedCalculator />
+        <div className="text-center py-2 text-[11px] font-medium text-slate-500 max-w-xl mx-auto mt-3">
+          Wissenschaftliches Modell nach Widmark (1932) &amp; Watson (1980) &bull;{' '}
           <a
-            href="https://widmarkformel.de"
+            href="https://www.widmarkformel.de"
             target="_blank"
-            rel="noopener"
-            className="text-amber-700 hover:text-amber-800 font-extrabold hover:underline"
+            rel="noopener noreferrer"
+            className="text-amber-800 hover:text-amber-950 font-bold underline"
           >
             widmarkformel.de
           </a>
         </div>
-        <ScrollToTop />
         <Analytics />
         <SpeedInsights />
       </div>
@@ -141,7 +172,7 @@ export function App() {
                       Promillerechner auf Ihrer Website einbinden
                     </h3>
                     <p className="text-xs text-slate-500 font-medium">
-                      Ideal für Fahrschulen, Ratgeber-Blogs, Anwaltskanzleien und Informationsportale.
+                      Kompakt, responsiv und ideal für Fahrschulen, Ratgeber-Blogs, Kanzleien und Portale.
                     </p>
                   </div>
                   <button
@@ -152,7 +183,7 @@ export function App() {
                   </button>
                 </div>
                 <div className="mt-4 bg-slate-900 text-slate-300 p-3.5 rounded-xl font-mono text-xs overflow-x-auto select-all">
-                  <code>{`<iframe src="https://widmarkformel.de/rechner-embed" width="100%" height="780" frameborder="0" style="border:none;border-radius:16px;overflow:hidden;max-width:860px;" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`}</code>
+                  <code>{`<iframe src="https://www.widmarkformel.de/rechner-embed" width="100%" height="680" frameborder="0" style="border:none;border-radius:16px;overflow:hidden;max-width:600px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,0.06);" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://www.widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`}</code>
                 </div>
               </div>
             </div>
@@ -172,21 +203,21 @@ export function App() {
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="font-black text-slate-950 text-base">Fachredaktion widmarkformel.de</span>
-                        <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-black rounded-full uppercase tracking-wider border border-emerald-200">
-                          Geprüfter Stand: September 2026
+                        <span className="px-2.5 py-0.5 bg-slate-100 text-slate-800 text-[10px] font-black rounded-full uppercase tracking-wider border border-slate-200">
+                          Wissenschaftliche Redaktion
                         </span>
                       </div>
                       <p className="text-xs text-slate-500 font-medium mt-0.5">
-                        Wissenschaftliche Validierung nach Erik M. P. Widmark (1932), Watson et al. (1980) &amp; StVG/StGB-Vorgaben
+                        Theoretische Modellierung nach Erik M. P. Widmark (1932), Watson et al. (1980) &amp; geltenden Rechtsnormen
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 self-start sm:self-auto">
-                    <span>Forensisch geprüft</span>
+                    <span>Fachliche Modellbildung</span>
                   </div>
                 </div>
                 <div className="pt-5 text-xs text-slate-600 leading-relaxed font-medium">
-                  Unsere Fachredaktion analysiert physikalische und biochemische Abbaukurven auf Basis internationaler toxikologischer Standards. Alle rechtlichen Schwellenwerte (§ 24a StVG, § 316 StGB) entsprechen der geltenden Rechtsprechung deutscher Oberlandesgerichte und des Bundesgerichtshofs (BGH).
+                  Unsere Fachredaktion analysiert biophysikalische und biochemische Modellkurven auf Basis toxikologischer Fachliteratur. Alle rechtlichen Schwellenwerte (§ 24a StVG, § 316 StGB) entsprechen den gesetzlichen Regelungen und der Rechtsprechung deutscher Gerichte. Dieser Rechner ist ein theoretisches Modell und begründet keine individuelle Fahrtauglichkeit.
                 </div>
               </div>
             </div>
@@ -202,7 +233,7 @@ export function App() {
       </main>
 
       {/* Legal & Informative Footer */}
-      <Footer onNavigate={navigate} />
+      <Footer onNavigate={navigate} onScrollTo={scrollTo} />
 
       {/* Scroll to Top Button & Analytics */}
       <ScrollToTop />
@@ -213,3 +244,4 @@ export function App() {
 }
 
 export default App;
+

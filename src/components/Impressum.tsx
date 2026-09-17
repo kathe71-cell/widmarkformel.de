@@ -90,18 +90,6 @@ export const Impressum: React.FC<ImpressumProps> = ({ onBack }) => {
               <h2 className="text-base font-extrabold text-slate-950 mb-2">
                 Verbraucherstreitbeilegung / Universalschlichtungsstelle:
               </h2>
-              <p className="mb-3">
-                Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit, die Sie unter{' '}
-                <a 
-                  href="https://ec.europa.eu/consumers/odr" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-amber-700 underline hover:text-amber-800 break-all font-semibold"
-                >
-                  https://ec.europa.eu/consumers/odr
-                </a>{' '}
-                finden. Unsere E-Mail-Adresse lautet: jens@kathe.org.
-              </p>
               <p>
                 Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
               </p>

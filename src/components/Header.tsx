@@ -30,11 +30,11 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
           <p className="flex items-center gap-1.5 truncate">
             <Info className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span className="truncate">
-              * Unabhängiges Informationsportal. Wissenschaftliche Modellrechnung nach Erik M. P. Widmark (1932) &amp; P. E. Watson (1980).
+              Unabhängiges Informationsportal. Wissenschaftliche Modellrechnung nach Erik M. P. Widmark (1932) &amp; P. E. Watson (1980).
             </span>
           </p>
           <div className="hidden md:flex items-center gap-4 text-slate-400 shrink-0 text-[11px]">
-            <span>100% DSGVO-konform (Zero-CDN)</span>
+            <span>Datenschutzkonform</span>
             <span>•</span>
             <span>Stand: StVG &amp; StGB 2025/2026</span>
           </div>
@@ -121,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-md hover:shadow-lg transition-all transform active:scale-95 border border-amber-600 flex items-center gap-2"
             >
               <Calculator className="w-4 h-4" />
-              <span>BAK berechnen *</span>
+              <span>BAK berechnen</span>
             </button>
           </div>
 
@@ -131,7 +131,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView, onNavigate }) => {
               onClick={() => handleNavClick('home', 'rechner')}
               className="px-3 py-2 rounded-lg bg-amber-500 text-slate-950 font-extrabold text-xs flex items-center gap-1"
             >
-              Rechner *
+              Rechner
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

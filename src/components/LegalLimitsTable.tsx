@@ -144,25 +144,25 @@ export const LegalLimitsTable: React.FC = () => {
                     <h3 className="text-base font-extrabold text-slate-950">
                       Ordnungswidrigkeit (§ 24a StVG – Gesetzliche Regelschwelle)
                     </h3>
-                    <span className="text-xs text-slate-500 font-medium">Rechtsgrundlage: § 24a Abs. 1 StVG</span>
+                    <span className="text-xs text-slate-500 font-medium">Rechtsgrundlage: § 24a Abs. 1 StVG (ab 0,25 mg/l AAK bzw. 0,50 ‰ BAK)</span>
                   </div>
                 </div>
                 <div className="text-xs font-bold px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-300 self-start sm:self-auto">
-                  Fahrverbot garantiert
+                  Regelsanktion Fahrverbot
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
                 <div>
-                  <strong className="block text-slate-900 font-bold mb-1">1. Verstoß:</strong>
-                  <span className="font-bold text-slate-900">500 € Bußgeld</span>, 2 Punkte in Flensburg, 1 Monat Fahrverbot.
+                  <strong className="block text-slate-900 font-bold mb-1">1. Verstoß (Ersttat):</strong>
+                  <span className="font-bold text-slate-900">500 € Bußgeld</span>, 2 Punkte in Flensburg, 1 Monat Fahrverbot als Regelfolge.
                 </div>
                 <div>
                   <strong className="block text-slate-900 font-bold mb-1">2. Verstoß (Wiederholung):</strong>
                   <span className="font-bold text-slate-900">1.000 € Bußgeld</span>, 2 Punkte in Flensburg, 3 Monate Fahrverbot.
                 </div>
                 <div>
-                  <strong className="block text-slate-900 font-bold mb-1">3. Verstoß:</strong>
-                  <span className="font-bold text-slate-900">1.500 € Bußgeld</span>, 2 Punkte in Flensburg, 3 Monate Fahrverbot + MPU-Anordnung.
+                  <strong className="block text-slate-900 font-bold mb-1">3. Verstoß &amp; Wiederholung:</strong>
+                  <span className="font-bold text-slate-900">1.500 € Bußgeld</span>, 2 Punkte in Flensburg, 3 Monate Fahrverbot sowie behördliche MPU-Anordnung (§ 13 Nr. 2 Buchst. b FeV).
                 </div>
               </div>
             </div>
@@ -188,15 +188,15 @@ export const LegalLimitsTable: React.FC = () => {
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
                 <div>
                   <strong className="block text-slate-900 font-bold mb-1">Beweisführung:</strong>
-                  Kein Nachweis von Ausfallerscheinungen erforderlich. Die Rechtsprechung unterstellt die Unfähigkeit zum sicheren Führen absolut.
+                  Kein gesonderter Nachweis von Ausfallerscheinungen nötig. Die Rechtsprechung unterstellt die Unfähigkeit zum sicheren Führen absolut und unwiderlegbar.
                 </div>
                 <div>
                   <strong className="block text-slate-900 font-bold mb-1">Strafen &amp; Punkte:</strong>
-                  Freiheitsstrafe bis zu 1 Jahr oder hohe Geldstrafe (ca. 40–60 Tagessätze), 3 Punkte im Fahreignungsregister.
+                  Geldstrafe (oft 40–60 Tagessätze) oder Freiheitsstrafe bis zu 1 Jahr (bei Gefährdung nach § 315c StGB bis zu 5 Jahre), 3 Punkte im Fahreignungsregister.
                 </div>
                 <div>
                   <strong className="block text-slate-900 font-bold mb-1">Fahrerlaubnis:</strong>
-                  Vollständiger Entzug der Fahrerlaubnis (kein bloßes Fahrverbot!) mit Sperrfrist von mindestens 6 Monaten bis zu mehreren Jahren.
+                  Regelentzug der Fahrerlaubnis durch das Strafgericht (§ 69 StGB) mit Verhängung einer Sperrfrist für die Neuerteilung (mind. 6 Monate).
                 </div>
               </div>
             </div>
@@ -212,25 +212,25 @@ export const LegalLimitsTable: React.FC = () => {
                     <h3 className="text-base font-extrabold text-slate-950">
                       Zwingende MPU-Anordnung vor Neuerteilung
                     </h3>
-                    <span className="text-xs text-slate-500 font-medium">Rechtsgrundlage: § 13 Nr. 2 Buchstabe c FeV</span>
+                    <span className="text-xs text-slate-500 font-medium">Rechtsgrundlage: § 13 Satz 1 Nr. 2 Buchstabe c FeV</span>
                   </div>
                 </div>
                 <div className="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-500 text-slate-950 self-start sm:self-auto">
-                  MPU-Pflicht
+                  Zwingende MPU-Pflicht
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
                 <div>
-                  <strong className="block text-slate-900 font-bold mb-1">Medizinische Relevanz:</strong>
-                  Wer mit ≥ 1,6 ‰ noch in der Lage ist, ein Fahrzeug zu lenken, weist eine erhebliche Giftgewöhnung (Alkoholtoleranz) auf.
+                  <strong className="block text-slate-900 font-bold mb-1">Toxikologische Bedeutung:</strong>
+                  Wer bei ≥ 1,60 ‰ noch fahrtüchtig wirkt oder ein Fahrzeug lenken kann, weist eine ungewöhnlich hohe Alkoholgewöhnung (Toleranzentwicklung) auf.
                 </div>
                 <div>
-                  <strong className="block text-slate-900 font-bold mb-1">Voraussetzung für Neuerteilung:</strong>
-                  Erfolgreiches Bestehen einer MPU inklusive 6–12 Monaten nachgewiesener Alkoholabstinenz (Haar-/Urinanalysen).
+                  <strong className="block text-slate-900 font-bold mb-1">Gutachten &amp; Abstinenz:</strong>
+                  Erfolgreiches Bestehen einer MPU. Ob und für welchen Zeitraum (z. B. 6 bis 15 Monate) Abstinenzbelege nach CTU-Kriterien erforderlich sind oder ein kontrolliertes Trinken genügt, hängt von der individuellen diagnostischen Begutachtung ab.
                 </div>
                 <div>
-                  <strong className="block text-slate-900 font-bold mb-1">Wichtiger Länder-Hinweis:</strong>
-                  In einigen Bundesländern (z. B. Bayern und Baden-Württemberg) ordnen Führerscheinstellen bei Wiederholungstätern die MPU bereits ab 1,1 ‰ an.
+                  <strong className="block text-slate-900 font-bold mb-1">Wiederholung &amp; Rechtsprechung:</strong>
+                  Bundesweit ist die MPU ab 1,60 ‰ zwingend. Bei Wiederholungstätern (§ 13 Satz 1 Nr. 2 Buchst. b FeV) ist sie unabhängig von der Promillehöhe vorgeschrieben. Nach verwaltungsgerichtlicher Rechtsprechung (u. a. Bayerischer VGH) kann bei Anhaltspunkten für Alkoholmissbrauch auch ab 1,10 ‰ eine MPU verlangt werden.
                 </div>
               </div>
             </div>

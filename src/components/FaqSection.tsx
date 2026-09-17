@@ -56,7 +56,7 @@ const FAQ_DATA: FaqItem[] = [
   {
     category: 'Recht & Straßenverkehr',
     question: 'Ist das Ergebnis eines Online-Promillerechners vor Gericht oder der Polizei verwertbar?',
-    answer: 'Nein. Jeder Online-Rechner liefert ausschließlich eine unverbindliche Modellrechnung. Weder Polizei noch Gerichte erkennen errechnete Werte als Entlastungsbeweis an. Bei Verkehrskontrollen wird zunächst ein Atemalkohol-Vortest durchgeführt; für ein strafrechtliches Verfahren oder ein Fahrverbot ist stets die gerichtsmedizinische Blutentnahme und Laboranalyse mit Doppelbestimmung nach den Richtlinien der Bafam/DGVM maßgeblich.'
+    answer: 'Nein. Jeder Online-Rechner liefert ausschließlich eine unverbindliche Modellrechnung. Weder Polizei noch Gerichte erkennen theoretische Berechnungen als Beweismittel an. Bei Verkehrskontrollen wird zunächst ein Atemalkohol-Vortest durchgeführt. Für behördliche Bußgeldverfahren wegen einer Ordnungswidrigkeit (§ 24a StVG bis 1,09 ‰) sind stationäre, eichamtlich überwachte Atemalkohol-Messgeräte (wie Dräger 7110/9510 nach DIN VDE 0405) gerichtlich voll verwertbar. Bei Verdacht auf eine Straftat (§ 316 StGB ab 1,10 ‰ oder bei Ausfallerscheinungen) ist stets die gerichtsmedizinische Blutentnahme mit Labor-Doppelbestimmung (GC + ADH) gesetzlich zwingend.'
   }
 ];
 

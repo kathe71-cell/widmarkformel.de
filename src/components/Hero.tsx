@@ -31,12 +31,12 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCalculator }) => {
               Widmark-Formel &amp; Promillerechner: <br className="hidden sm:inline" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-700 to-slate-900">
                 Blutalkoholkonzentration (BAK)
-              </span> präzise berechnen
+              </span> modellhaft berechnen
             </h1>
 
             <p className="mt-5 text-base sm:text-lg text-slate-700 leading-relaxed max-w-2xl font-normal">
-              Ermitteln Sie Ihre theoretische Blutalkoholkonzentration und die voraussichtliche Abbauzeit wissenschaftlich fundiert. 
-              Berechnung nach der klassischen <strong>Widmark-Formel</strong> sowie der verfeinerten <strong>Watson-Formel</strong> (Gesamtkörperwasser) unter Berücksichtigung von Resorptionsdefizit und individueller Abbaurate.
+              Ermitteln Sie Ihre theoretische Blutalkoholkonzentration und den modellhaften Abbauverlauf wissenschaftlich fundiert. 
+              Berechnung nach der klassischen <strong>Widmark-Formel (1932)</strong> sowie der verfeinerten <strong>Watson-Formel (1980)</strong> (Gesamtkörperwasser) unter Berücksichtigung von Resorptionsdefizit und individueller Abbaurate.
             </p>
 
             {/* Position-0 Featured Snippet Definition Box (Google AI Overviews) */}
@@ -46,20 +46,20 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCalculator }) => {
                 <span>Auf den Punkt gebracht: Definition der Widmark-Formel</span>
               </div>
               <p className="text-slate-950 font-bold text-sm sm:text-base leading-snug">
-                Die Widmark-Formel berechnet die theoretische maximale Blutalkoholkonzentration (BAK in ‰) nach der Gleichung <code className="bg-amber-200/70 text-amber-950 px-1.5 py-0.5 rounded font-mono font-black">c = A / (p · r)</code>. Dabei ist A die aufgenommene reine Alkoholmasse in Gramm, p das Körpergewicht in Kilogramm und r der Reduktionsfaktor (Männer ca. 0,7; Frauen ca. 0,6). Der stündliche biologische Abbauwert liegt bei ca. 0,10 bis 0,15 ‰.
+                Die Widmark-Formel berechnet die theoretische maximale Blutalkoholkonzentration (BAK in ‰) nach der Gleichung <code className="bg-amber-200/70 text-amber-950 px-1.5 py-0.5 rounded font-mono font-black">c = A / (p · r)</code>. Dabei ist A die aufgenommene reine Alkoholmasse in Gramm, p das Körpergewicht in Kilogramm und r der Reduktionsfaktor (Männer ca. 0,70; Frauen ca. 0,60). Der biologische Abbauwert (β₆₀) liegt durchschnittlich bei ca. 0,10 bis 0,20 ‰ pro Stunde.
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-600 pt-2 border-t border-amber-200/60">
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
-                  Forensischer Standard: <strong>BGHSt 25, 246 / DIN EN 15964</strong>
+                  Wissenschaftliche Basis: <strong>Erik Widmark (1932) &amp; Watson (1980)</strong>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-emerald-600" />
-                  Geprüfter Stand: <strong>September 2026</strong>
+                  Aktuelle Rechtsnormen: <strong>StVG &amp; StGB</strong>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Award className="w-3.5 h-3.5 text-amber-700" />
-                  Fachredaktionell zertifiziert
+                  Orientierende Modellrechnung
                 </span>
               </div>
             </div>
@@ -68,7 +68,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCalculator }) => {
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-800 font-medium">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Exakte Formel: <code className="text-xs bg-slate-200 px-1.5 py-0.5 rounded font-mono font-bold">c = A / (p · r)</code></span>
+                <span>Klassische Formel: <code className="text-xs bg-slate-200 px-1.5 py-0.5 rounded font-mono font-bold">c = A / (p · r)</code></span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -76,7 +76,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCalculator }) => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Stündliche Abbaukurve im Zeitverlauf</span>
+                <span>Hypothetischer Abbauverlauf im Zeitstrahl</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -91,7 +91,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCalculator }) => {
                 className="w-full sm:w-auto px-7 py-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-base shadow-lg hover:shadow-xl transition-all transform active:scale-95 border border-amber-600 flex items-center justify-center gap-3"
               >
                 <Calculator className="w-5 h-5" />
-                <span>Jetzt Promille berechnen *</span>
+                <span>Jetzt Promille berechnen</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
@@ -104,7 +104,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToCalculator }) => {
             </div>
 
             <p className="mt-3 text-xs text-slate-500 font-normal">
-              * Modellrechnung. Die individuelle Blutalkoholkonzentration unterliegt biologischen Schwankungen. Keine forensische Rechtsberatung.
+              Modellrechnung. Die individuelle Blutalkoholkonzentration unterliegt biologischen Schwankungen. Dieser Rechner begründet keine Fahrtauglichkeit.
             </p>
           </div>
 

@@ -13,11 +13,11 @@ export interface UserProfile {
   weightKg: number;
   heightCm: number;
   age: number;
-  stomachCondition: 'empty' | 'normal' | 'full'; // 10%, 20%, 30% resorptionsdefizit
+  stomachCondition: 'empty' | 'normal' | 'full'; // Empirische Schätzwerte: 10%, 20%, 30% Resorptionsdefizit
   formulaType: 'classic' | 'watson';
-  eliminationRate: number; // typically 0.15 permille per hour (range: 0.10 - 0.20)
-  drinkingDurationHours: number; // hours of drinking session
-  hoursSinceDrinkingStart: number; // for current estimated status
+  eliminationRate: number; // typisch 0,15 ‰/h (forensische Bandbreite: 0,10 - 0,20 ‰/h)
+  drinkingDurationHours: number; // Trinkdauer (Zeitspanne zwischen erstem und letztem Getränk)
+  hoursSinceDrinkingEnd: number; // Zeit seit Trinkende bis zum Auswertungszeitpunkt
 }
 
 export interface CalculationResult {
@@ -25,14 +25,11 @@ export interface CalculationResult {
   reductionFactor: number;
   resorptionDeficitPercent: number;
   effectiveAlcoholGrams: number;
-  maxBacPermille: number; // Theoretical peak BAK (Blutalkoholkonzentration)
-  currentBacPermille: number; // BAK right now
-  hoursToZero: number; // hours from start to 0.00
-  hoursTo03: number; // hours until 0.30 permille (relative Fahruntüchtigkeit)
-  hoursTo05: number; // hours until 0.50 permille (§ 24a StVG limit)
+  maxBacPermille: number; // Theoretische Maximal-BAK
+  currentBacPermille: number; // Modellierte BAK zum Auswertungszeitpunkt
   timeSeries: { hour: number; bac: number; label: string }[];
   drivingStatus: {
-    status: 'safe' | 'caution' | 'danger' | 'crime';
+    status: 'zero' | 'caution' | 'danger' | 'crime';
     title: string;
     description: string;
     color: string;
@@ -49,8 +46,9 @@ export const PRESET_DRINKS: DrinkItem[] = [
 ];
 
 /**
- * Calculates pure alcohol mass in grams:
- * A = Volume (ml) * (Vol% / 100) * 0.8 g/ml (density of ethanol)
+ * Berechnet die reine Alkoholmasse A in Gramm:
+ * A = Volumen (ml) * (Vol.-% / 100) * 0,8 g/ml
+ * (Dichte von reinem Ethanol bei Raumtemperatur ca. 0,789 g/ml, in der Praxis auf 0,8 g/ml gerundet).
  */
 export function calculateAlcoholGrams(drinks: DrinkItem[]): number {
   return drinks.reduce((total, drink) => {
@@ -61,19 +59,25 @@ export function calculateAlcoholGrams(drinks: DrinkItem[]): number {
 }
 
 /**
- * Calculates the reduction factor r:
- * - Classic Widmark: 0.70 for men, 0.60 for women
- * - Watson TBW (Total Body Water):
- *   Male TBW = 2.447 - (0.09516 * age) + (0.1074 * height) + (0.3362 * weight)
- *   Female TBW = -2.097 + (0.1069 * height) + (0.2466 * weight)
- *   r = TBW / (0.8 * weight)
+ * Berechnet den Reduktionsfaktor r (Verteilungsfaktor):
+ * - Klassische Widmark-Formel (1932):
+ *   Fester Mittelwert r = 0,70 für Männer, r = 0,60 für Frauen.
+ * - Watson-Formel (1980):
+ *   Berechnung des Gesamtkörperwassers (Total Body Water, TBW in Litern)
+ *   unter Einbeziehung von Alter, Körpergröße und Gewicht:
+ *   TBW_männlich = 2,447 - (0,09516 * Alter) + (0,1074 * Größe_cm) + (0,3362 * Gewicht_kg)
+ *   TBW_weiblich = -2,097 + (0,1069 * Größe_cm) + (0,2466 * Gewicht_kg)
+ *   r = TBW / (0,8 * Gewicht_kg)   [0,8 = Wasseranteil des Vollbluts]
+ * 
+ * Anwendungsgrenzen: Bei extremem Über- oder Untergewicht (stark abweichender BMI),
+ * Dehydratation oder außergewöhnlicher Muskelmasse treten naturgemäß Modellabweichungen auf.
  */
 export function calculateReductionFactor(profile: UserProfile): number {
   if (profile.formulaType === 'classic') {
     return profile.gender === 'male' ? 0.70 : 0.60;
   }
 
-  // Watson formula
+  // Watson TBW
   let tbw = 0;
   if (profile.gender === 'male') {
     tbw = 2.447 - (0.09516 * profile.age) + (0.1074 * profile.heightCm) + (0.3362 * profile.weightKg);
@@ -82,21 +86,33 @@ export function calculateReductionFactor(profile: UserProfile): number {
   }
 
   const r = tbw / (0.8 * profile.weightKg);
-  // Forensic boundary check (Watson usually ranges between 0.55 and 0.80)
+  // Plausibilitätsgrenzen (forensische Bandbreite des Verteilungsfaktors)
   return Math.min(Math.max(r, 0.48), 0.88);
 }
 
 /**
- * Comprehensive Widmark calculation with elimination curve
+ * Orientierende Modellrechnung nach Widmark & Watson.
+ * 
+ * Zeitlogik & Resorptionskinetik:
+ * - Trinkdauer (t_drink): Zeitspanne zwischen erstem und letztem Getränk.
+ * - Resorptionsverzögerung: Der Resorptionsgipfel tritt typischerweise 30–60 Minuten
+ *   (bei voller Mahlzeit bis zu 120 Minuten) nach Trinkende ein.
+ * - Während des Trinkens erfolgt bereits eine kontinuierliche Resorption und ein
+ *   zeitgleicher Beginn der Elimination.
+ * - Elimination: Lineare Kinetik (0. Ordnung) mit beta60 (0,10 - 0,20 ‰/h, Standard 0,15 ‰/h).
+ * 
+ * HINWEIS: Dies ist eine vereinfachte didaktische Modellrechnung und liefert keine forensische
+ * Sicherheit für Fahrtauglichkeitsentscheidungen.
  */
 export function calculateWidmark(profile: UserProfile, drinks: DrinkItem[]): CalculationResult {
   const totalAlcoholGrams = calculateAlcoholGrams(drinks);
   const r = calculateReductionFactor(profile);
 
-  // Resorption deficit:
-  // Empty stomach = 10% (0.10)
-  // Normal meal = 20% (0.20)
-  // Full/rich meal = 30% (0.30)
+  // Empirische Resorptionsdefizit-Schätzwerte:
+  // Nüchtern: ca. 10 %
+  // Normale Mahlzeit: ca. 20 %
+  // Fettig / reichhaltig: ca. 30 %
+  // (Dienen als Populationsrichtwerte, unterliegen individueller biologischer Streuung)
   const deficitMap = {
     empty: 0.10,
     normal: 0.20,
@@ -105,38 +121,54 @@ export function calculateWidmark(profile: UserProfile, drinks: DrinkItem[]): Cal
   const resorptionDeficitPercent = (deficitMap[profile.stomachCondition] || 0.20) * 100;
   const effectiveAlcoholGrams = totalAlcoholGrams * (1 - (resorptionDeficitPercent / 100));
 
-  // Theoretical Peak BAC: c0 = A_eff / (weight * r)
+  // Theoretische Spitzen-BAK: c0 = A_eff / (p * r)
   const weight = Math.max(profile.weightKg, 30);
   const maxBacPermille = effectiveAlcoholGrams > 0 ? effectiveAlcoholGrams / (weight * r) : 0;
 
-  // Elimination kinetics:
-  // Elimination typically starts approx. 0.5h after drinking begins.
-  // Rate beta60 is between 0.10 and 0.20 ‰/h (default 0.15 ‰/h).
+  // Zeitparameter
+  const duration = Math.max(0.1, profile.drinkingDurationHours);
+  const postEnd = Math.max(0, profile.hoursSinceDrinkingEnd);
+  const totalElapsedFromStart = duration + postEnd;
+
+  // Resorptionsverzögerung nach Trinkende abhängig vom Magenzustand
+  const postEndLag = profile.stomachCondition === 'full' ? 1.0 : profile.stomachCondition === 'normal' ? 0.75 : 0.5;
+  const peakTimeFromStart = duration + postEndLag;
+
   const beta60 = profile.eliminationRate;
 
-  // Current BAC calculation
-  // Hours of elimination elapsed since consumption started minus initial absorption delay (0.5h)
-  const elapsedHours = Math.max(profile.hoursSinceDrinkingStart, 0);
-  const effectiveEliminationHours = Math.max(0, elapsedHours - 0.5);
-  const eliminatedSoFar = effectiveEliminationHours * beta60;
-  const currentBacPermille = Math.max(0, maxBacPermille - eliminatedSoFar);
+  // Modellierte BAK zum aktuellen Zeitpunkt
+  let currentBacPermille = 0;
+  if (maxBacPermille > 0) {
+    if (totalElapsedFromStart <= peakTimeFromStart) {
+      // Anflutungs- / Resorptionsphase
+      const fraction = Math.min(1, Math.max(0, totalElapsedFromStart / peakTimeFromStart));
+      // Während des Anflutens wird bereits ein Teil abgebaut
+      const grossBac = maxBacPermille * Math.sqrt(fraction); // Typische konkave Anflutungskurve
+      const eliminationDuringIntake = Math.max(0, (totalElapsedFromStart - 0.5) * beta60 * 0.5);
+      currentBacPermille = Math.max(0, grossBac - eliminationDuringIntake);
+    } else {
+      // Post-Peak Eliminationsphase
+      const hoursPastPeak = totalElapsedFromStart - peakTimeFromStart;
+      currentBacPermille = Math.max(0, maxBacPermille - (hoursPastPeak * beta60));
+    }
+  }
 
-  // Time calculations from start of drinking
-  const hoursToZeroFromStart = maxBacPermille > 0 ? (maxBacPermille / beta60) + 0.5 : 0;
-  const hoursTo03FromStart = maxBacPermille > 0.3 ? ((maxBacPermille - 0.3) / beta60) + 0.5 : 0;
-  const hoursTo05FromStart = maxBacPermille > 0.5 ? ((maxBacPermille - 0.5) / beta60) + 0.5 : 0;
-
-  // Generate hourly time series for graph (up to 24 hours or until zero)
-  const maxHoursGraph = Math.min(24, Math.max(8, Math.ceil(hoursToZeroFromStart) + 2));
+  // Generierung der hypothetischen Modellkurve für das Diagramm (bis 24 h oder Rechner-Nullwert)
+  const estimatedHoursToZero = maxBacPermille > 0 ? peakTimeFromStart + (maxBacPermille / beta60) : 0;
+  const maxHoursGraph = Math.min(24, Math.max(8, Math.ceil(estimatedHoursToZero) + 2));
   const timeSeries: { hour: number; bac: number; label: string }[] = [];
 
   for (let h = 0; h <= maxHoursGraph; h += 0.5) {
     let bacAtH = 0;
-    if (h < 0.5) {
-      // Absorption ramp-up phase
-      bacAtH = maxBacPermille * (h / 0.5);
-    } else {
-      bacAtH = Math.max(0, maxBacPermille - ((h - 0.5) * beta60));
+    if (maxBacPermille > 0) {
+      if (h <= peakTimeFromStart) {
+        const frac = Math.min(1, Math.max(0, h / peakTimeFromStart));
+        const gross = maxBacPermille * Math.sqrt(frac);
+        const elim = Math.max(0, (h - 0.5) * beta60 * 0.5);
+        bacAtH = Math.max(0, gross - elim);
+      } else {
+        bacAtH = Math.max(0, maxBacPermille - ((h - peakTimeFromStart) * beta60));
+      }
     }
     timeSeries.push({
       hour: h,
@@ -145,40 +177,41 @@ export function calculateWidmark(profile: UserProfile, drinks: DrinkItem[]): Cal
     });
   }
 
-  // Legal status assessment for Germany
+  // Rechtliche Einordnung des Modellwerts nach deutschem Recht (StVG / StGB)
+  // WICHTIG: Keine Fahrfreigaben, keine Bestätigung tatsächlicher Nüchternheit!
   let drivingStatus: CalculationResult['drivingStatus'] = {
-    status: 'safe',
-    title: 'Kein messbarer Alkohol',
-    description: '0,00 ‰ – Sie befinden sich im nüchternen Normbereich.',
-    color: 'emerald',
+    status: 'zero',
+    title: 'Rechnerisch 0,00 ‰ (Modellwert)',
+    description: 'Das Modell ergibt rechnerisch 0,00 ‰. Tatsächliche Nüchternheit und Fahrtüchtigkeit werden dadurch nicht bestätigt.',
+    color: 'slate',
   };
 
   if (currentBacPermille >= 1.1) {
     drivingStatus = {
       status: 'crime',
-      title: 'Absolute Fahruntüchtigkeit (Straftat § 316 StGB)',
-      description: 'Ab 1,10 ‰ gilt jeder Fahrzeugführer ausnahmslos als absolut fahruntüchtig. Es drohen Führerscheinentzug, hohe Geldstrafe und 3 Punkte in Flensburg.',
+      title: 'Modellwert im Bereich absoluter Fahruntüchtigkeit (§ 316 StGB)',
+      description: 'Ab 1,10 ‰ gilt jeder Fahrzeugführer im Straßenverkehr unwiderlegbar als fahruntüchtig. Es drohen Strafverfahren, Entzug der Fahrerlaubnis und Geld- oder Freiheitsstrafe.',
       color: 'rose',
     };
   } else if (currentBacPermille >= 0.5) {
     drivingStatus = {
       status: 'danger',
-      title: 'Ordnungswidrigkeit (§ 24a StVG)',
-      description: 'Ab 0,50 ‰ ist das Führen von Kraftfahrzeugen verboten. Mindestens 500 € Bußgeld, 2 Punkte und 1 Monat Fahrverbot.',
+      title: 'Modellwert im Bereich der Regelsanktion nach § 24a StVG',
+      description: 'Ab 0,50 ‰ (bzw. 0,25 mg/l AAK) liegt bei Kraftfahrzeugen eine Ordnungswidrigkeit vor (Regelsanktion ab 500 € Bußgeld, 2 Punkte, 1 Monat Fahrverbot).',
       color: 'amber',
     };
   } else if (currentBacPermille >= 0.3) {
     drivingStatus = {
       status: 'caution',
-      title: 'Relative Fahruntüchtigkeit (§ 316 StGB)',
-      description: 'Ab 0,30 ‰ droht bei Fahrfehlern, Ausfallerscheinungen oder einem Unfall bereits ein Strafverfahren wegen Trunkenheit im Verkehr.',
+      title: 'Modellwert im Bereich relativer Fahruntüchtigkeit (§ 316 StGB)',
+      description: 'Ab 0,30 ‰ droht bei Fahrfehlern, alkoholbedingten Ausfallerscheinungen oder einem Unfall ein Strafverfahren wegen Trunkenheit im Verkehr.',
       color: 'yellow',
     };
   } else if (currentBacPermille > 0.0) {
     drivingStatus = {
       status: 'caution',
-      title: 'Alkohol messbar (0,0 ‰ für Fahranfänger)',
-      description: 'In der Führerschein-Probezeit und für Fahrer unter 21 Jahren gilt nach § 24c StVG ein striktes Alkoholverbot (0,00 ‰).',
+      title: 'Modellwert über 0,00 ‰ (Gesetzliches Verbot für Fahranfänger & U21)',
+      description: 'Für Fahrer in der Probezeit und Personen unter 21 Jahren gilt nach § 24c StVG ein striktes Alkoholverbot. Auch geringe Konzentrationen können die Reaktionszeit beeinträchtigen.',
       color: 'blue',
     };
   }
@@ -190,10 +223,8 @@ export function calculateWidmark(profile: UserProfile, drinks: DrinkItem[]): Cal
     effectiveAlcoholGrams: Number(effectiveAlcoholGrams.toFixed(1)),
     maxBacPermille: Number(maxBacPermille.toFixed(2)),
     currentBacPermille: Number(currentBacPermille.toFixed(2)),
-    hoursToZero: Number(hoursToZeroFromStart.toFixed(1)),
-    hoursTo03: Number(hoursTo03FromStart.toFixed(1)),
-    hoursTo05: Number(hoursTo05FromStart.toFixed(1)),
     timeSeries,
     drivingStatus,
   };
 }
+

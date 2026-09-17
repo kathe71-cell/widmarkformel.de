@@ -1,11 +1,25 @@
 import React from 'react';
-import { ShieldCheck, ExternalLink } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (view: string) => void;
+  onScrollTo?: (id: string) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onScrollTo }) => {
+  const handleSectionClick = (e: React.MouseEvent, sectionId: string) => {
+    e.preventDefault();
+    if (onScrollTo) {
+      onScrollTo(sectionId);
+    } else {
+      onNavigate('home');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 50);
+    }
+  };
+
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800 text-xs">
       
@@ -21,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 widmarkformel.de &bull; Wissenschaftliche Alkohol- &amp; Promilleberechnung
               </p>
               <p className="text-slate-400 text-xs mt-0.5">
-                * widmarkformel.de ist ein unabhängiges Informationsangebot und steht in keinem gesellschaftsrechtlichen Verhältnis zu Behörden, Fahrschulen oder Prüforganisationen.
+                widmarkformel.de ist ein unabhängiges Informationsangebot und steht in keinem gesellschaftsrechtlichen Verhältnis zu Behörden, Fahrschulen oder Prüforganisationen.
               </p>
             </div>
           </div>
@@ -29,7 +43,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="flex items-center gap-2 shrink-0">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-semibold text-xs">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              Zero-CDN DSGVO
+              Datenschutzkonform
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-semibold text-xs">
               StVO / StVG 2025/2026
@@ -48,10 +62,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Über das Portal
             </h3>
             <p className="text-slate-400 leading-relaxed text-xs mb-3">
-              widmarkformel.de bietet Autofahrern, Medizin-Interessierten und Juristen einen präzisen, transparenten Promillerechner auf Basis der international anerkannten Arbeiten von Erik M. P. Widmark (1932) und P. E. Watson (1980).
+              widmarkformel.de bietet Interessierten, Verkehrsteilnehmern und Fachkreisen einen transparenten Promillerechner auf Basis der Arbeiten von Erik M. P. Widmark (1932) und P. E. Watson (1980).
             </p>
             <p className="text-[11px] text-slate-500">
-              * Sämtliche Ergebnisse sind beispielhafte Modellrechnungen. Die tatsächliche Blutalkoholkonzentration hängt von Stoffwechsel, Magenfüllung und Enzymen ab.
+              Sämtliche Ergebnisse sind beispielhafte Modellrechnungen. Die tatsächliche Blutalkoholkonzentration hängt von Stoffwechsel, Magenfüllung und Enzymen ab.
             </p>
           </div>
 
@@ -62,32 +76,56 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h3>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#rechner" className="hover:text-amber-400 transition-colors">
+                <a 
+                  href="/#rechner" 
+                  onClick={(e) => handleSectionClick(e, 'rechner')}
+                  className="hover:text-amber-400 transition-colors"
+                >
                   &bull; Interaktiver Promillerechner (Widmark &amp; Watson)
                 </a>
               </li>
               <li>
-                <a href="#herleitung" className="hover:text-amber-400 transition-colors">
+                <a 
+                  href="/#herleitung" 
+                  onClick={(e) => handleSectionClick(e, 'herleitung')}
+                  className="hover:text-amber-400 transition-colors"
+                >
                   &bull; Mathematische Herleitung der Widmark-Formel
                 </a>
               </li>
               <li>
-                <a href="#promillegrenzen" className="hover:text-amber-400 transition-colors">
+                <a 
+                  href="/#promillegrenzen" 
+                  onClick={(e) => handleSectionClick(e, 'promillegrenzen')}
+                  className="hover:text-amber-400 transition-colors"
+                >
                   &bull; Promillegrenzen Deutschland (§ 24a StVG, § 316 StGB)
                 </a>
               </li>
               <li>
-                <a href="#messtechnik" className="hover:text-amber-400 transition-colors">
+                <a 
+                  href="/#messtechnik" 
+                  onClick={(e) => handleSectionClick(e, 'messtechnik')}
+                  className="hover:text-amber-400 transition-colors"
+                >
                   &bull; Messtechnik: Alkomaten vs. Forensische Blutprobe
                 </a>
               </li>
               <li>
-                <a href="#lexikon" className="hover:text-amber-400 transition-colors">
+                <a 
+                  href="/#lexikon" 
+                  onClick={(e) => handleSectionClick(e, 'lexikon')}
+                  className="hover:text-amber-400 transition-colors"
+                >
                   &bull; Fachlexikon (BAK, Watson, MPU &amp; FeV)
                 </a>
               </li>
               <li>
-                <a href="#faq" className="hover:text-amber-400 transition-colors">
+                <a 
+                  href="/#faq" 
+                  onClick={(e) => handleSectionClick(e, 'faq')}
+                  className="hover:text-amber-400 transition-colors"
+                >
                   &bull; Häufige Fragen &amp; Antworten (FAQ)
                 </a>
               </li>
@@ -129,10 +167,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Anbieter &amp; Rechtliches
             </h3>
             <div className="space-y-2 text-xs text-slate-400">
-              <p className="text-slate-300 font-medium">Unabhängiges Fachportal zur Alkohol- und Promilleberechnung.<br />Kleinunternehmer nach § 19 UStG.</p><p className="text-[11px] text-slate-500">Vollständige Betreiberangaben entnehmen Sie bitte dem Impressum.</p>
-              <p className="text-[11px] text-slate-500">
-                Kleinunternehmer nach § 19 UStG.
-              </p>
+              <p className="text-slate-300 font-medium">Unabhängiges Fachportal zur Alkohol- und Promilleberechnung.<br />Kleinunternehmer nach § 19 UStG.</p>
+              <p className="text-[11px] text-slate-500">Vollständige Betreiberangaben entnehmen Sie bitte dem Impressum.</p>
               
               <div className="pt-2 flex flex-wrap gap-3">
                 <button
@@ -153,22 +189,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         </div>
 
-        {/* Bottom Bar: OS Platform & Copyright */}
+        {/* Bottom Bar: Copyright */}
         <div className="mt-12 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
           <div>
             &copy; {new Date().getFullYear()} widmarkformel.de &bull; Alle Rechte vorbehalten.
           </div>
-
-          <div className="flex items-center gap-4">
-            <a
-              href="https://ec.europa.eu/consumers/odr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-slate-300 flex items-center gap-1"
-            >
-              <span>EU-Streitschlichtung (OS-Plattform)</span>
-              <ExternalLink className="w-3 h-3" />
-            </a>
+          <div>
+            Unabhängiges Informationsportal. Fahren Sie niemals unter Alkoholeinfluss.
           </div>
         </div>
 
@@ -176,3 +203,4 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     </footer>
   );
 };
+

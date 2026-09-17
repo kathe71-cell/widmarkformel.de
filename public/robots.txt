@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://widmarkformel.de/sitemap.xml
+Sitemap: https://www.widmarkformel.de/sitemap.xml

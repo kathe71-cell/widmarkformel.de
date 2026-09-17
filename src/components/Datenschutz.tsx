@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ShieldCheck, Lock } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Lock, BarChart3, Radio } from 'lucide-react';
 
 interface DatenschutzProps {
   onBack: () => void;
@@ -21,9 +21,9 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
 
         <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-10 shadow-sm">
           
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 text-emerald-950 border border-emerald-300 mb-4">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
-            100% DSGVO-konform (Zero-CDN)
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold bg-slate-100 text-slate-800 border border-slate-300 mb-4">
+            <ShieldCheck className="w-3.5 h-3.5 text-slate-700" />
+            Datenschutz &amp; Transparenz
           </div>
 
           <h1 className="text-3xl font-black text-slate-950 tracking-tight mb-8">
@@ -32,14 +32,14 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
 
           <div className="space-y-8 text-sm text-slate-700 leading-relaxed">
             
-            {/* 1. Datenschutz auf einen Blick */}
-            <section className="p-5 rounded-xl bg-emerald-50 border border-emerald-200">
-              <h2 className="text-base font-extrabold text-emerald-950 mb-2 flex items-center gap-2">
-                <Lock className="w-4 h-4 text-emerald-700" />
-                Datenschutz auf einen Blick: Lokale Berechnung ohne Serverübertragung
+            {/* 1. Lokale Berechnung */}
+            <section className="p-5 rounded-xl bg-amber-50/60 border border-amber-200">
+              <h2 className="text-base font-extrabold text-amber-950 mb-2 flex items-center gap-2">
+                <Lock className="w-4 h-4 text-amber-700" />
+                Lokale Berechnung im Browser ohne Serverübertragung
               </h2>
-              <p className="text-xs text-emerald-950 leading-relaxed">
-                Ihre Privatsphäre ist uns ein zentrales Anliegen. Sämtliche Angaben, die Sie in unseren Promillerechner eingeben (wie Alter, Geschlecht, Körpergewicht und getrunkene Alkoholmengen), werden <strong>ausschließlich lokal in Ihrem Browser verarbeitet</strong>. Es findet zu keinem Zeitpunkt eine Übertragung dieser sensiblen Nutzungsdaten an unsere Server oder Dritte statt.
+              <p className="text-xs text-amber-950 leading-relaxed">
+                Sämtliche Eingaben, die Sie in unseren Promillerechner eingeben (wie Alter, Geschlecht, Körpergröße, Körpergewicht und getrunkene Alkoholmengen), werden <strong>ausschließlich lokal in Ihrem Browser (JavaScript) verarbeitet</strong>. Diese physiologischen Angaben werden nicht auf unseren Webservern gespeichert und nicht an Dritte übertragen.
               </p>
             </section>
 
@@ -51,59 +51,87 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
               <p>
                 Verantwortlicher für die Datenverarbeitung auf dieser Website im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:
               </p>
-              <div className="mt-3 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-700">Verantwortlicher im Sinne der DSGVO ist der Betreiber dieser Website. Die vollständigen Kontaktdaten und Angaben zum Verantwortlichen finden Sie im <a href="/impressum" className="text-amber-700 font-semibold hover:underline">Impressum</a>.</div>
+              <div className="mt-3 p-4 rounded-xl bg-slate-50 border border-slate-200 text-slate-800 text-xs leading-relaxed">
+                <strong>Jens Kathe</strong><br />
+                Hansastraße 6<br />
+                34119 Kassel<br />
+                Deutschland<br />
+                E-Mail: <a href="mailto:jens@kathe.org" className="text-amber-700 underline font-semibold">jens@kathe.org</a><br />
+                Telefon: +49 178 6652623
+              </div>
             </section>
 
-            {/* 3. Hosting & Server-Log-Dateien */}
+            {/* 3. Hosting & Server-Logfiles */}
             <section>
               <h2 className="text-lg font-black text-slate-950 mb-3">
                 2. Hosting &amp; Server-Log-Dateien
               </h2>
               <p className="mb-2">
-                Diese Website wird auf Servern der Plattform Vercel (Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA) gehostet.
+                Diese Website wird über die Plattform Vercel der Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA bereitgestellt.
               </p>
               <p className="mb-2">
-                Beim Aufruf unserer Website erfasst der Webserver automatisch technische Informationen (sogenannte Server-Logfiles):
+                Beim Aufruf unserer Seiten erfasst der Server automatisiert technische Verbindungsdaten (Server-Logfiles):
               </p>
               <ul className="list-disc list-inside space-y-1 text-xs text-slate-600 pl-2">
                 <li>Browsertyp und Browserversion</li>
                 <li>Verwendetes Betriebssystem</li>
-                <li>Referrer URL (zuvor besuchte Seite)</li>
-                <li>Hostname des zugreifenden Rechners / IP-Adresse (anonymisiert)</li>
-                <li>Uhrzeit der Serveranfrage</li>
+                <li>Referrer URL (die zuvor besuchte Seite)</li>
+                <li>IP-Adresse des anfragenden Geräts</li>
+                <li>Datum und Uhrzeit der Serveranfrage</li>
               </ul>
               <p className="mt-2 text-xs">
-                Die Rechtsgrundlage für die vorübergehende Speicherung dieser Daten ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der technischen Stabilität und Sicherheit der Website).
+                Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO zur Gewährleistung der technischen Stabilität, IT-Sicherheit und Fehleranalyse.
               </p>
             </section>
 
-            {/* 4. Zero-CDN & Keine externen Schriftarten */}
+            {/* 4. Vercel Web Analytics & Speed Insights */}
             <section>
-              <h2 className="text-lg font-black text-slate-950 mb-3">
-                3. Keine Google Fonts &amp; keine externen CDNs (Zero-CDN Policy)
-              </h2>
-              <p>
-                Zum Schutz Ihrer Privatsphäre und zur Vermeidung jeglicher IP-Adressübertragung in Drittstaaten binden wir <strong>keine externen Schriftarten (wie Google Fonts)</strong> oder externe JavaScript-Bibliotheken über Content Delivery Networks (CDNs) ein. Alle Stylesheets und Schriften basieren auf dem nativen System-Font-Stack Ihres Betriebssystems.
-              </p>
-            </section>
-
-            {/* 5. Affiliate-Links / Partnerprogramme */}
-            <section>
-              <h2 className="text-lg font-black text-slate-950 mb-3">
-                4. Partner- &amp; Affiliate-Links
-              </h2>
-              <p>
-                Auf widmarkformel.de befinden sich themenbezogene Links zu externen Partnern (z. B. zertifizierten Atemalkoholtestern). Diese Links sind transparent mit einem Sternchen (*) gekennzeichnet. Wenn Sie auf einen solchen Partnerlink klicken, werden Sie direkt auf die Website des Anbieters weitergeleitet. Erst dort greifen die Datenschutzbestimmungen und Tracking-Mechanismen des jeweiligen Partners.
-              </p>
-            </section>
-
-            {/* 6. Ihre Rechte als betroffene Person */}
-            <section>
-              <h2 className="text-lg font-black text-slate-950 mb-3">
-                5. Ihre Rechte gemäß DSGVO
+              <h2 className="text-lg font-black text-slate-950 mb-3 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-slate-700" />
+                3. Webanalyse: Vercel Web Analytics &amp; Speed Insights
               </h2>
               <p className="mb-2">
-                Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf:
+                Wir nutzen Web Analytics und Speed Insights von Vercel Inc., um aggregierte Einblicke in die technische Performance (Core Web Vitals wie Ladezeiten) und die Nutzung unserer Unterseiten zu erhalten.
+              </p>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Vercel Web Analytics verzichtet standardmäßig auf persistente Tracking-Cookies und erfasst Metriken in aggregierter, pseudonymisierter Form. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der bedarfsgerechten Optimierung und Performance unseres Webangebots).
+              </p>
+            </section>
+
+            {/* 5. Google AdSense */}
+            <section>
+              <h2 className="text-lg font-black text-slate-950 mb-3 flex items-center gap-2">
+                <Radio className="w-5 h-5 text-amber-600" />
+                4. Werbedienste: Google AdSense
+              </h2>
+              <p className="mb-2">
+                Auf dieser Website ist das Werbeprogramm Google AdSense eingebunden (Publisher-ID: <code>ca-pub-7078147966379221</code>). Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“).
+              </p>
+              <p className="mb-2 text-xs leading-relaxed text-slate-700">
+                Google AdSense verwendet Cookies und sogenannte Web Beacons (unsichtbare Grafiken), um die Schaltung von Werbeanzeigen zu steuern und das Nutzerverhalten zu analysieren. Hierbei können Daten wie Ihre IP-Adresse, Geräteinformationen und Ihr Nutzungsverhalten an Server von Google (auch in den USA) übertragen und dort gespeichert werden.
+              </p>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Rechtsgrundlage ist, soweit eine Einwilligung erteilt wurde, Art. 6 Abs. 1 lit. a DSGVO; andernfalls basiert die Auslieferung auf Art. 6 Abs. 1 lit. f DSGVO. Sie können personalisierte Werbung in den Einstellungen für Google-Werbung deaktivieren unter <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 underline font-semibold">https://adssettings.google.com</a>. Weitere Informationen zur Datennutzung durch Google finden Sie unter <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-amber-700 underline font-semibold">https://policies.google.com/technologies/ads</a>.
+              </p>
+            </section>
+
+            {/* 6. Partner- & Affiliate-Links */}
+            <section>
+              <h2 className="text-lg font-black text-slate-950 mb-3">
+                5. Partner- &amp; Affiliate-Links
+              </h2>
+              <p className="text-xs leading-relaxed text-slate-700">
+                Auf unserer Website finden Sie gekennzeichnete Verweise zu externen Angeboten (z. B. zu zertifizierten Atemalkoholtestern). Diese Links sind mit einem Sternchen (*) gekennzeichnet. Bei einem Klick auf einen solchen Partner- bzw. Suchlink werden Sie auf die Website des jeweiligen Anbieters (z. B. Amazon.de) weitergeleitet. Erst dort kommen die jeweiligen Datenschutzbestimmungen des Anbieters zur Anwendung.
+              </p>
+            </section>
+
+            {/* 7. Ihre Rechte */}
+            <section>
+              <h2 className="text-lg font-black text-slate-950 mb-3">
+                6. Ihre Rechte gemäß DSGVO
+              </h2>
+              <p className="mb-2">
+                Sie haben im Rahmen der geltenden gesetzlichen Vorschriften jederzeit folgende Rechte:
               </p>
               <ul className="list-disc list-inside space-y-1 text-xs text-slate-600 pl-2">
                 <li>Auskunft über Ihre bei uns gespeicherten personenbezogenen Daten (Art. 15 DSGVO)</li>
@@ -112,10 +140,10 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
                 <li>Einschränkung der Datenverarbeitung (Art. 18 DSGVO)</li>
                 <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
                 <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
-                <li>Beschwerde bei einer zuständigen Datenschutzaufsichtsbehörde (Art. 77 DSGVO)</li>
+                <li>Beschwerderecht bei einer zuständigen Datenschutzaufsichtsbehörde (Art. 77 DSGVO)</li>
               </ul>
               <p className="mt-3 text-xs">
-                Bei Fragen zum Datenschutz wenden Sie sich bitte jederzeit per E-Mail an <a href="mailto:jens@kathe.org" className="text-amber-700 underline font-semibold">jens@kathe.org</a>.
+                Bei Fragen wenden Sie sich jederzeit per E-Mail an: <a href="mailto:jens@kathe.org" className="text-amber-700 underline font-semibold">jens@kathe.org</a>.
               </p>
             </section>
 
@@ -127,3 +155,4 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
     </div>
   );
 };
+

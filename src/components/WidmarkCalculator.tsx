@@ -13,7 +13,7 @@ import {
   RotateCcw, 
   Clock, 
   Activity, 
-  Car,
+  AlertTriangle,
   Flame,
   Info,
   Copy,
@@ -55,12 +55,12 @@ export const WidmarkCalculator: React.FC = () => {
     formulaType: 'watson',
     eliminationRate: 0.15,
     drinkingDurationHours: 2,
-    hoursSinceDrinkingStart: 3,
+    hoursSinceDrinkingEnd: 1,
   });
 
   // State for drinks
   const [drinks, setDrinks] = useState<DrinkItem[]>([
-    { ...PRESET_DRINKS[1], count: 2 }, // 2x 0.5l Beer by default
+    { ...PRESET_DRINKS[1], count: 2 }, // 2x 0.5l Bier standardmäßig
   ]);
 
   // State for custom drink form
@@ -119,7 +119,7 @@ export const WidmarkCalculator: React.FC = () => {
       formulaType: 'watson',
       eliminationRate: 0.15,
       drinkingDurationHours: 2,
-      hoursSinceDrinkingStart: 3,
+      hoursSinceDrinkingEnd: 1,
     });
   };
 
@@ -131,6 +131,8 @@ export const WidmarkCalculator: React.FC = () => {
   const totalPureAlcohol = useMemo(() => {
     return calculateAlcoholGrams(drinks);
   }, [drinks]);
+
+  const totalElapsedFromStart = profile.drinkingDurationHours + profile.hoursSinceDrinkingEnd;
 
   // Max value for SVG chart scaling
   const chartMaxY = Math.max(1.6, results.maxBacPermille * 1.25);
@@ -153,16 +155,27 @@ export const WidmarkCalculator: React.FC = () => {
   const currentPointCoordinates = useMemo(() => {
     if (!results.timeSeries.length) return null;
     const maxHour = results.timeSeries[results.timeSeries.length - 1].hour || 1;
-    const currentH = Math.min(profile.hoursSinceDrinkingStart, maxHour);
+    const currentH = Math.min(totalElapsedFromStart, maxHour);
     const x = paddingX + (currentH / maxHour) * (chartWidth - paddingX * 2);
     const y = (chartHeight - paddingY) - (results.currentBacPermille / chartMaxY) * (chartHeight - paddingY * 2);
     return { x, y };
-  }, [profile.hoursSinceDrinkingStart, results.timeSeries, results.currentBacPermille, chartMaxY]);
+  }, [totalElapsedFromStart, results.timeSeries, results.currentBacPermille, chartMaxY]);
 
   return (
     <section id="rechner" className="py-12 md:py-20 bg-slate-50 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        {/* Persistent Safety & Model Banner */}
+        <div className="mb-8 p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 flex items-start gap-3.5 shadow-sm text-amber-950">
+          <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+          <div className="text-xs sm:text-sm leading-relaxed">
+            <strong className="block font-black text-amber-950 text-sm sm:text-base mb-1">
+              Wichtiger Sicherheits- &amp; Modellhinweis:
+            </strong>
+            Dieser Rechner ist ein rein theoretisches Lehrmodell und keinesfalls geeignet, um Entscheidungen über das Führen von Fahrzeugen oder die rechtliche Fahrtüchtigkeit zu treffen. Fahren Sie niemals nach Alkoholkonsum!
+          </div>
+        </div>
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 md:mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-950 border border-amber-300 mb-3">
@@ -170,10 +183,10 @@ export const WidmarkCalculator: React.FC = () => {
             Interaktiver Rechner nach Erik Widmark &amp; Watson
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 tracking-tight">
-            Blutalkohol &amp; Abbauzeit berechnen
+            Blutalkohol &amp; Abbauverlauf kalkulieren
           </h2>
           <p className="mt-3 text-slate-600 text-sm sm:text-base">
-            Geben Sie Ihre physiologischen Daten und konsumierten Getränke ein. Der Rechner ermittelt sofort die theoretische Maximal-BAK, den stündlichen Abbau und den aktuellen Restpromillewert.
+            Geben Sie Ihre physiologischen Daten, konsumierte Getränke sowie Trinkdauer und verstrichene Zeit ein. Das Modell berechnet die theoretische Maximal-BAK und simuliert den hypothetischen Abbauverlauf.
           </p>
         </div>
 
@@ -461,34 +474,66 @@ export const WidmarkCalculator: React.FC = () => {
                 </button>
               </div>
 
-              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Elapsed time since start */}
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <div className="flex justify-between items-center mb-1">
-                    <label htmlFor="elapsed-time-slider" className="text-xs font-bold text-slate-700 flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-600" />
-                      Verstrichene Zeit seit Trinkbeginn
-                    </label>
-                    <span className="font-mono text-sm font-black text-slate-900">
-                      {profile.hoursSinceDrinkingStart} h
-                    </span>
+              <div className="mt-5 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Drinking duration */}
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="flex justify-between items-center mb-1">
+                      <label htmlFor="duration-slider" className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-slate-600" />
+                        Trinkdauer (erstes bis letztes Getränk)
+                      </label>
+                      <span className="font-mono text-sm font-black text-slate-900">
+                        {profile.drinkingDurationHours} h
+                      </span>
+                    </div>
+                    <input
+                      id="duration-slider"
+                      aria-label="Trinkdauer in Stunden"
+                      type="range"
+                      min="0.5"
+                      max="12"
+                      step="0.5"
+                      value={profile.drinkingDurationHours}
+                      onChange={e => setProfile(p => ({ ...p, drinkingDurationHours: Number(e.target.value) }))}
+                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+                      <span>30 Min.</span>
+                      <span>4 Std.</span>
+                      <span>8 Std.</span>
+                      <span>12 Std.</span>
+                    </div>
                   </div>
-                  <input
-                    id="elapsed-time-slider"
-                    aria-label="Verstrichene Zeit seit Trinkbeginn in Stunden"
-                    type="range"
-                    min="0.5"
-                    max="18"
-                    step="0.5"
-                    value={profile.hoursSinceDrinkingStart}
-                    onChange={e => setProfile(p => ({ ...p, hoursSinceDrinkingStart: Number(e.target.value) }))}
-                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
-                  />
-                  <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-                    <span>Gerade eben</span>
-                    <span>6 Std.</span>
-                    <span>12 Std.</span>
-                    <span>18 Std.</span>
+
+                  {/* Time since drinking ended */}
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="flex justify-between items-center mb-1">
+                      <label htmlFor="since-end-slider" className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                        <Clock className="w-3.5 h-3.5 text-slate-600" />
+                        Zeit seit Trinkende (bis jetzt)
+                      </label>
+                      <span className="font-mono text-sm font-black text-slate-900">
+                        {profile.hoursSinceDrinkingEnd} h
+                      </span>
+                    </div>
+                    <input
+                      id="since-end-slider"
+                      aria-label="Zeit seit Trinkende in Stunden"
+                      type="range"
+                      min="0"
+                      max="24"
+                      step="0.5"
+                      value={profile.hoursSinceDrinkingEnd}
+                      onChange={e => setProfile(p => ({ ...p, hoursSinceDrinkingEnd: Number(e.target.value) }))}
+                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                    />
+                    <div className="flex justify-between text-[10px] text-slate-500 mt-1">
+                      <span>Sofort (0h)</span>
+                      <span>6 Std.</span>
+                      <span>12 Std.</span>
+                      <span>24 Std.</span>
+                    </div>
                   </div>
                 </div>
 
@@ -520,6 +565,11 @@ export const WidmarkCalculator: React.FC = () => {
                     <span>0,20 ‰ (zügig)</span>
                   </div>
                 </div>
+
+                {/* Resorption explanation note */}
+                <div className="p-3 rounded-lg bg-slate-100 border border-slate-200 text-[11px] text-slate-600 leading-relaxed">
+                  <strong>Zeitliche Modellannahme:</strong> Gesamtdauer seit Beginn: <strong className="text-slate-900">{totalElapsedFromStart.toFixed(1)} h</strong> ({profile.drinkingDurationHours} h Konsum + {profile.hoursSinceDrinkingEnd} h seit Ende). Der Resorptionsgipfel wird modellmäßig ca. 30–60 Minuten nach Trinkende angenommen (bei voller Mahlzeit bis zu 120 Min.).
+                </div>
               </div>
 
             </div>
@@ -536,7 +586,7 @@ export const WidmarkCalculator: React.FC = () => {
 
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500">
-                  Modellrechnung-Ergebnis *
+                  Modellrechnung-Ergebnis
                 </span>
                 <button
                   type="button"
@@ -548,14 +598,14 @@ export const WidmarkCalculator: React.FC = () => {
                   <span>{copiedShareLink ? 'Link kopiert!' : 'Ergebnis teilen'}</span>
                 </button>
                 <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700">
-                  Live kalkuliert
+                  Theoretischer Wert
                 </span>
               </div>
 
               {/* Current BAC Meter */}
               <div className="mt-5 text-center">
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                  Geschätzte Rest-BAK (nach {profile.hoursSinceDrinkingStart} h)
+                  Geschätzte Rest-BAK (nach {totalElapsedFromStart.toFixed(1)} h seit Trinkbeginn)
                 </div>
                 <div className="mt-1 font-mono text-5xl sm:text-6xl font-black tracking-tight text-slate-950 flex items-baseline justify-center gap-1">
                   <span>{results.currentBacPermille.toFixed(2)}</span>
@@ -575,9 +625,11 @@ export const WidmarkCalculator: React.FC = () => {
                   ? 'bg-amber-50 border-amber-300 text-amber-950'
                   : results.currentBacPermille >= 0.3
                   ? 'bg-yellow-50 border-yellow-300 text-yellow-950'
-                  : 'bg-emerald-50 border-emerald-300 text-emerald-950'
+                  : results.currentBacPermille > 0.0
+                  ? 'bg-blue-50 border-blue-300 text-blue-950'
+                  : 'bg-slate-100 border-slate-300 text-slate-900'
               }`}>
-                <Car className="w-5 h-5 shrink-0 mt-0.5 text-slate-900" />
+                <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-slate-800" />
                 <div>
                   <div className="text-sm font-extrabold text-slate-950">
                     {results.drivingStatus.title}
@@ -588,28 +640,16 @@ export const WidmarkCalculator: React.FC = () => {
                 </div>
               </div>
 
-              {/* Time Projection Cards */}
-              <div className="mt-6 grid grid-cols-3 gap-2 text-center">
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="block text-[11px] font-bold text-slate-600">Unter 0,5 ‰</span>
-                  <span className="font-mono text-sm sm:text-base font-black text-slate-950">
-                    {results.currentBacPermille <= 0.5 ? 'Bereits unter 0,5' : `in ca. ${((results.currentBacPermille - 0.5) / profile.eliminationRate).toFixed(1)} h`}
-                  </span>
+              {/* Hypothetical Simulation Note (Replacing Individual Countdowns) */}
+              <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center gap-2 text-xs font-extrabold text-slate-900 mb-1.5">
+                  <Clock className="w-4 h-4 text-slate-700" />
+                  <span>Hypothetischer Modellverlauf &amp; Kinetik</span>
                 </div>
-
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="block text-[11px] font-bold text-slate-600">Unter 0,3 ‰</span>
-                  <span className="font-mono text-sm sm:text-base font-black text-slate-950">
-                    {results.currentBacPermille <= 0.3 ? 'Bereits unter 0,3' : `in ca. ${((results.currentBacPermille - 0.3) / profile.eliminationRate).toFixed(1)} h`}
-                  </span>
-                </div>
-
-                <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
-                  <span className="block text-[11px] font-bold text-emerald-900">Vollständig 0,0 ‰</span>
-                  <span className="font-mono text-sm sm:text-base font-black text-emerald-950">
-                    {results.currentBacPermille === 0 ? 'Nüchtern (0,00)' : `in ca. ${(results.currentBacPermille / profile.eliminationRate).toFixed(1)} h`}
-                  </span>
-                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Der rechnerische Abbau folgt näherungsweise einer Kinetik 0. Ordnung mit der gewählten Abbaurate von <strong className="text-slate-900 font-mono">{profile.eliminationRate.toFixed(2)} ‰/h</strong>. 
+                  Biologische Faktoren (Enzymaktivität ADH/ALDH, Magenfüllung, Dehydratation) führen in der Realität zu individuellen Abweichungen. Countdown-Angaben zur Fahrfähigkeit sind unzulässig und wissenschaftlich nicht haltbar.
+                </p>
               </div>
 
               {/* Scientific Parameter Breakdown Table */}
@@ -643,7 +683,7 @@ export const WidmarkCalculator: React.FC = () => {
               <div className="mt-5 p-3 rounded-lg bg-slate-100 border border-slate-200 text-[11px] text-slate-600 leading-normal flex items-start gap-2">
                 <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <p>
-                  * Modellrechnung. Die tatsächliche Höhe hängt vom individuellen Nutzungsverhalten, Mageninhalt, individueller Enzymausstattung (ADH/ALDH) und weiteren biologischen Faktoren ab. Dieser Rechner ersetzt keine forensische Blutuntersuchung.
+                  Modellrechnung. Die tatsächliche Höhe hängt vom individuellen Nutzungsverhalten, Mageninhalt, individueller Enzymausstattung (ADH/ALDH) und weiteren biologischen Faktoren ab. Dieser Rechner ersetzt keine forensische Blutuntersuchung und begründet keine Fahrtauglichkeit.
                 </p>
               </div>
 
@@ -655,7 +695,7 @@ export const WidmarkCalculator: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4 text-amber-600" />
                   <h4 className="font-bold text-slate-900 text-sm">
-                    Abbaukurve im Zeitverlauf
+                    Hypothetischer Modellverlauf (Orientierende Simulation)
                   </h4>
                 </div>
                 <span className="text-xs text-slate-500 font-mono">
@@ -780,7 +820,7 @@ export const WidmarkCalculator: React.FC = () => {
                         fontWeight="bold"
                         fill="#0f172a"
                       >
-                        Jetzt: {results.currentBacPermille.toFixed(2)} ‰
+                        Modell: {results.currentBacPermille.toFixed(2)} ‰
                       </text>
                     </g>
                   )}
@@ -793,7 +833,7 @@ export const WidmarkCalculator: React.FC = () => {
                     Zeitlicher Abbauverlauf
                   </text>
                   <text x={chartWidth - paddingX} y={chartHeight - 8} fontSize="9" fill="#64748b" textAnchor="end">
-                    0,00 ‰ (Nüchtern)
+                    0,00 ‰ (Modellgrenze)
                   </text>
                 </svg>
               </div>
@@ -802,11 +842,11 @@ export const WidmarkCalculator: React.FC = () => {
               <div className="mt-3 flex flex-wrap items-center justify-center gap-4 text-[11px] text-slate-600">
                 <span className="flex items-center gap-1.5">
                   <span className="w-3 h-0.5 bg-rose-500 inline-block"></span>
-                  1,1 ‰ (Straftat)
+                  1,1 ‰ (§ 316 StGB)
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-3 h-0.5 bg-amber-500 inline-block"></span>
-                  0,5 ‰ (Fahrverbot)
+                  0,5 ‰ (§ 24a StVG)
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-3 h-0.5 bg-yellow-500 inline-block"></span>
@@ -814,7 +854,7 @@ export const WidmarkCalculator: React.FC = () => {
                 </span>
                 <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500 border border-slate-900 inline-block"></span>
-                  Aktueller Status
+                  Modell-Status
                 </span>
               </div>
             </div>
