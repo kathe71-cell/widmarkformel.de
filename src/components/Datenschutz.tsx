@@ -102,7 +102,7 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
             <section>
               <h2 className="text-lg font-black text-slate-950 mb-3 flex items-center gap-2">
                 <Radio className="w-5 h-5 text-amber-600" />
-                4. Werbedienste: Google AdSense &amp; Einwilligungserfordernis
+                4. Werbedienste: Google AdSense, Consent-Stufen &amp; Limited Ads (LTD)
               </h2>
               <p className="mb-2">
                 Auf dieser Website ist der Werbedienst Google AdSense eingebunden (Publisher-ID: <code>ca-pub-7078147966379221</code>). Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“; Muttergesellschaft: Google LLC, Mountain View, CA, USA).
@@ -110,47 +110,84 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
               <div className="space-y-3 text-xs leading-relaxed text-slate-700">
                 <p>
                   <strong>Rechtsgrundlagen nach TDDDG und DSGVO:</strong><br />
-                  Gemäß den geltenden europäischen und deutschen Datenschutzbestimmungen sowie der verbindlichen 
+                  Gemäß den europäischen Vorgaben (ePrivacy-Richtlinie, DSGVO) sowie der verbindlichen{' '}
                   <a 
                     href="https://www.google.com/about/company/user-consent-policy/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-amber-800 underline font-semibold mx-1"
+                    className="text-amber-800 underline font-semibold"
                   >
                     Google-Richtlinie zur Einwilligung der Nutzer in der EU (EU User Consent Policy)
-                  </a>
-                  bedarf sowohl das Speichern und Auslesen von Informationen auf Ihrem Endgerät (wie Cookies, Werbe-IDs oder Geräte-Kennungen) als auch die Erhebung und Verarbeitung personenbezogener Daten für personalisierte Werbeanzeigen Ihrer vorherigen, ausdrücklichen Einwilligung:
+                  </a>{' '}
+                  unterscheidet das Werbesystem technisch und rechtlich drei Stufen der Anzeigenauslieferung:
                 </p>
-                <ul className="list-disc list-inside space-y-1 pl-2 text-slate-600">
-                  <li>
-                    <strong>Endgerätezugriff (§ 25 Abs. 1 TDDDG):</strong> Das Setzen und Auslesen von Cookies, Werbe-IDs und vergleichbaren Identifikatoren zu Marketing- und Analysezwecken erfolgt ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung. Ein Rückgriff auf ein pauschales berechtigtes Interesse ist für diese Endgerätezugriffe gesetzlich ausgeschlossen.
-                  </li>
-                  <li>
-                    <strong>Verarbeitung personenbezogener Daten (Art. 6 Abs. 1 lit. a DSGVO):</strong> Die Verwendung von Nutzungsdaten, Klickpfaden und Profilbildungsdaten zur Personalisierung von Werbeanzeigen und für Remarketing basiert ebenfalls ausnahmslos auf Ihrer vorherigen Einwilligung.
-                  </li>
-                </ul>
+
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>1. Personalisierte Anzeigen (Personalized Ads):</span>
+                  </div>
+                  <p className="text-slate-600 pl-3.5">
+                    <strong>Voraussetzung:</strong> Volle Einwilligung sowohl für den Endgerätezugriff (§ 25 Abs. 1 TDDDG) als auch für die Werbepersonalisierung (Art. 6 Abs. 1 lit. a DSGVO; TCF-Zwecke 1, 3 und 4).<br />
+                    <strong>Endgerätezugriff &amp; Funktion:</strong> Google speichert und liest Werbe-Cookies und Identifikatoren aus, um nutzerbezogene Interessenprofile zu erstellen und geräteübergreifend personalisierte Werbung auszuspielen.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span>2. Nicht-personalisierte Anzeigen (NPA – Non-Personalized Ads):</span>
+                  </div>
+                  <p className="text-slate-600 pl-3.5">
+                    <strong>Wichtige Klarstellung:</strong> Nicht-personalisierte Anzeigen sind <em className="italic">nicht automatisch einwilligungsfrei</em> bezüglich des Endgerätezugriffs. Zwar werden bei NPA keine Werbeprofile erstellt und Anzeigen rein kontextbezogen ausgewählt, Google verwendet jedoch laut{' '}
+                    <a 
+                      href="https://support.google.com/adsense/answer/9007336?hl=en-GB" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-amber-800 underline font-semibold"
+                    >
+                      offizieller Google-Dokumentation zu NPA
+                    </a>{' '}
+                    weiterhin Cookies und mobile Werbe-IDs für Frequency Capping (Begrenzung der Kontakthäufigkeit), aggregierte Anzeigenberichte und Betrugsprävention. Daher setzt auch der NPA-Modus eine wirksame Einwilligung für den Endgerätezugriff (§ 25 Abs. 1 TDDDG / TCF-Zweck 1) voraus.
+                  </p>
+                </div>
+
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-slate-500"></span>
+                    <span>3. Tatsächlicher Ablehnungsfall: Eingeschränkte Anzeigen (Limited Ads – LTD):</span>
+                  </div>
+                  <p className="text-slate-600 pl-3.5">
+                    <strong>Wann aktiv:</strong> Wenn der Nutzer die Einwilligung in den Endgerätezugriff (§ 25 Abs. 1 TDDDG / TCF-Zweck 1) verweigert oder widerruft.<br />
+                    <strong>Endgerätezugriffe &amp; Technik:</strong> Gemäß den Spezifikationen für{' '}
+                    <a 
+                      href="https://support.google.com/adsense/answer/14210870?hl=en" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-amber-800 underline font-semibold"
+                    >
+                      Google Limited Ads (LTD)
+                    </a>{' '}
+                    werden in diesem Fall sämtliche werbebezogenen Zugriffe auf Cookies oder den lokalen Speicher (Local Storage) des Endgeräts vollständig unterbunden. Es werden <strong className="text-slate-800">keine Werbekennungen auf Ihrem Gerät gespeichert oder ausgelesen</strong>.<br />
+                    <strong>Auslieferung:</strong> Die Anzeigenauswahl erfolgt strikt kontextuell auf Basis der aktuell aufgerufenen Seite (URL, Inhaltsbegriffe) sowie der technisch zwingenden IP-Übermittlung zur serverseitigen Datenübertragung und groben Länderebene. Persistentes nutzerübergreifendes Tracking und Profilbildung sind im LTD-Modus technisch deaktiviert.
+                  </p>
+                </div>
+
                 <p>
-                  <strong>Tatsächliche Anzeigenkonfiguration &amp; Consent-Verhalten:</strong><br />
-                  Die Aussteuerung und Erfassung von Nutzer-Einwilligungen erfolgt über eine Google-zertifizierte Consent-Management-Plattform (CMP), die den IAB Transparency &amp; Consent Framework (TCF v2.2) Standard sowie den Google Consent Mode unterstützt. 
-                  Wird keine Einwilligung erteilt oder diese verweigert, schaltet Google AdSense ausschließlich nicht-personalisierte Anzeigen (Non-Personalized Ads / NPA). In diesem Fall werden keine Werbeprofile erstellt und Werbeanzeigen lediglich kontextbezogen basierend auf dem Inhalt der besuchten Unterseite ausgewählt. Auch technisch verbleibende Kennungen für Frequency Capping, aggregierte Berichterstattung und Betrugserkennung werden streng nach den Vorgaben der Google-Richtlinien und des TDDDG behandelt.
-                </p>
-                <p>
-                  <strong>Widerruf &amp; Personalisierungseinstellungen:</strong><br />
-                  Sie können eine einmal erteilte Einwilligung jederzeit mit Wirkung für die Zukunft über unsere Cookie- bzw. Datenschutzeinstellungen widerrufen oder anpassen. Darüber hinaus können Sie die Anzeige personalisierter Google-Werbung geräteübergreifend in den Einstellungen für Werbung von Google verwalten unter{' '}
+                  <strong>Consent-Steuerung &amp; Widerruf:</strong><br />
+                  Die Erfassung und Übermittlung der Nutzereinstellungen an Google erfolgt über eine Google-zertifizierte Consent-Management-Plattform (CMP), die den IAB Transparency &amp; Consent Framework (TCF v2.2) Standard und den Google Consent Mode implementiert. Sie können Ihre Einstellungen jederzeit über den Datenschutz- / Cookie-Dialog anpassen oder eine erteilte Einwilligung mit Wirkung für die Zukunft widerrufen. Personalisierte Google-Werbung können Sie zudem zentral unter{' '}
                   <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
                     https://adssettings.google.com
-                  </a>.
+                  </a>{' '}
+                  verwalten.
                 </p>
+
                 <p>
-                  <strong>Weiterführende Informationen von Google:</strong><br />
-                  Informationen darüber, wie Google Daten von Websites verwendet, auf denen Google-Dienste eingebunden sind, finden Sie unter{' '}
+                  <strong>Datenübermittlung in Drittstaaten:</strong><br />
+                  Soweit im Rahmen der Auslieferung Daten (wie die IP-Adresse) an Server von Google LLC in den USA übermittelt werden, stützt sich Google auf das EU-U.S. Data Privacy Framework (DPF) sowie die Standardvertragsklauseln der EU-Kommission. Weiterführende Hinweise zur Datenverwendung durch Google finden Sie unter{' '}
                   <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
                     https://policies.google.com/technologies/partner-sites
-                  </a>{' '}
-                  sowie in den Hinweisen zu Werbetechnologien unter{' '}
-                  <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
-                    https://policies.google.com/technologies/ads
-                  </a>. Soweit Daten in die USA übermittelt werden, stützt sich Google auf das EU-U.S. Data Privacy Framework (DPF).
+                  </a>.
                 </p>
               </div>
             </section>
