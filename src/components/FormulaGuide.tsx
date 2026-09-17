@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Cpu, FlaskConical } from 'lucide-react';
+import { Layers, Cpu, FlaskConical, Clock } from 'lucide-react';
 
 export const FormulaGuide: React.FC = () => {
   return (
@@ -132,8 +132,8 @@ export const FormulaGuide: React.FC = () => {
           </div>
         </div>
 
-        {/* Resorption Deficit & Watson Comparison */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        {/* Resorption Deficit, Watson Comparison & Kinetic Timeline */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           
           {/* Resorption Deficit Box */}
           <div className="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200">
@@ -188,6 +188,48 @@ export const FormulaGuide: React.FC = () => {
             </div>
           </div>
 
+        </div>
+
+        {/* Pharmacokinetic Multi-Phase Box: Resorption, Peak & Effective Elimination */}
+        <div className="p-6 sm:p-8 rounded-2xl bg-slate-900 text-white shadow-xl mb-12">
+          <div className="flex items-center gap-3 mb-3">
+            <Clock className="w-6 h-6 text-amber-400" />
+            <h4 className="font-black text-white text-xl">
+              Pharmakokinetik: Anflutung, Resorptionsgipfel &amp; effektive Abbauzeit
+            </h4>
+          </div>
+          <p className="text-sm text-slate-300 leading-relaxed max-w-4xl">
+            In der Praxis darf die lineare Eliminationsgleichung nicht blind über die gesamte Zeit seit Trinkbeginn angewandt werden. Reale Blutalkoholkurven gliedern sich in zwei fundamentale Phasen:
+          </p>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+            <div className="p-4 rounded-xl bg-slate-800 border border-slate-700">
+              <div className="font-bold text-amber-400 text-sm mb-1">1. Anflutung (Resorptionsphase)</div>
+              <p className="text-slate-300 leading-relaxed">
+                Während des Konsums (<code className="text-white font-mono">t_Trink</code>) und in der anschließenden Resorptionsverzögerung (<code className="text-white font-mono">Δt_Lag</code>: ca. 30–60 Min., bei voller Mahlzeit bis 120 Min.) strömt kontinuierlich Alkohol aus dem Magen-Darm-Trakt ins Blut. Der Blutspiegel steigt an.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-800 border border-slate-700">
+              <div className="font-bold text-amber-400 text-sm mb-1">2. Resorptionsgipfel (c_max)</div>
+              <p className="text-slate-300 leading-relaxed">
+                Der Spitzenwert <code className="text-white font-mono">c_max</code> tritt erst bei <code className="text-white font-mono">t_Gipfel = t_Trink + Δt_Lag</code> ein. Bei 2 h Trinken und normaler Mahlzeit (45 Min. Nachlauf) liegt der Gipfel erst ca. <strong>2,75 h nach Trinkbeginn</strong>.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-slate-800 border border-slate-700">
+              <div className="font-bold text-amber-400 text-sm mb-1">3. Effektive Elimination (Post-Peak)</div>
+              <p className="text-slate-300 leading-relaxed">
+                Rechnerischer linearer Abbau unter die Spitze findet erst nach Erreichen des Gipfels statt: <code className="text-amber-300 font-mono">t_eff = t_gesamt − t_Gipfel</code>. Bei 3 h Gesamtdauer beträgt die effektive Abbauzeit: <code className="text-white font-mono">3,0 − 2,75 = 0,25 h</code> (15 Minuten).
+              </p>
+            </div>
+          </div>
+          <div className="mt-5 p-4 rounded-xl bg-slate-800/90 border border-amber-400/30 text-xs text-slate-200">
+            <strong className="text-amber-300 font-semibold block mb-1">Die exakte Kinetik-Gleichung der Eliminationsphase:</strong>
+            <div className="font-mono text-xs sm:text-sm text-white bg-slate-950 p-2.5 rounded-lg border border-slate-700 overflow-x-auto">
+              c(t) = c_max − β₆₀ · max(0, t_gesamt − t_Gipfel) &emsp; mit &emsp; t_Gipfel = t_Trink + Δt_Lag
+            </div>
+            <p className="mt-2 text-[11px] text-slate-400">
+              Beispiel: Ein Spitzenwert von <code className="text-slate-200">0,56 ‰</code> bei 3 h Gesamtdauer (2 h Trinken + 1 h nach Ende) führt nicht zu <code className="text-slate-200">0,56 − 3 · 0,15 = 0,11 ‰</code>, sondern zu <code className="text-amber-300">0,56 − (0,15 · 0,25 h) ≈ 0,53 ‰</code>, da die Person erst seit 15 Minuten den Resorptionsgipfel überschritten hat.
+            </p>
+          </div>
         </div>
 
       </div>

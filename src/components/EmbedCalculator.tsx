@@ -67,14 +67,30 @@ export const EmbedCalculator: React.FC = () => {
   useEffect(() => {
     const notifyParent = () => {
       if (typeof window !== 'undefined' && window.parent && window.parent !== window) {
-        const height = containerRef.current ? containerRef.current.scrollHeight + 30 : document.body.scrollHeight;
-        window.parent.postMessage({ type: 'widmark-embed-resize', height }, '*');
+        const bodyHeight = document.body ? document.body.scrollHeight : 0;
+        const containerHeight = containerRef.current ? containerRef.current.offsetHeight + 35 : 0;
+        const height = Math.max(bodyHeight, containerHeight, 820);
+        window.parent.postMessage({ type: 'widmark-embed-resize', height: Math.ceil(height) }, '*');
       }
     };
 
     notifyParent();
+    const timer = setTimeout(notifyParent, 150);
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+      ro = new ResizeObserver(() => {
+        notifyParent();
+      });
+      ro.observe(containerRef.current);
+    }
+
     window.addEventListener('resize', notifyParent);
-    return () => window.removeEventListener('resize', notifyParent);
+    return () => {
+      clearTimeout(timer);
+      if (ro) ro.disconnect();
+      window.removeEventListener('resize', notifyParent);
+    };
   }, [drinks, profile, results]);
 
   return (
@@ -242,7 +258,24 @@ export const EmbedCalculator: React.FC = () => {
           <span className="text-xl font-bold text-amber-400">‰</span>
         </div>
         <div className="text-[10px] text-slate-400">
-          Theoretische Spitzen-BAK: <strong className="text-slate-200 font-mono">{results.maxBacPermille.toFixed(2)} ‰</strong> &bull; β₆₀: {profile.eliminationRate.toFixed(2)} ‰/h
+          Spitzen-BAK: <strong className="text-slate-200 font-mono">{results.maxBacPermille.toFixed(2)} ‰</strong> &bull; Gipfel: nach {results.timeKinetics.peakTimeFromStart.toFixed(2)} h &bull; Abbauzeit: {results.timeKinetics.effectiveEliminationHours.toFixed(2)} h
+        </div>
+
+        {/* Clear Kinetic Breakdown Badge */}
+        <div className="mt-2 flex justify-center">
+          {results.timeKinetics.isPostPeak ? (
+            <div className="inline-flex flex-wrap items-center justify-center gap-1 px-2.5 py-1 rounded bg-slate-800 text-[10px] font-mono text-amber-300 border border-slate-700">
+              <span>c(t) = {results.maxBacPermille.toFixed(2)} ‰</span>
+              <span>−</span>
+              <span>({profile.eliminationRate.toFixed(2)} × {results.timeKinetics.effectiveEliminationHours.toFixed(2)} h)</span>
+              <span>=</span>
+              <strong className="text-white font-bold">{results.currentBacPermille.toFixed(2)} ‰</strong>
+            </div>
+          ) : (
+            <div className="inline-flex items-center px-2 py-0.5 rounded bg-blue-900/60 text-[10px] text-blue-200 border border-blue-700">
+              Anflutungsphase (Resorption bis c_max aktiv)
+            </div>
+          )}
         </div>
 
         {/* Status Text Box */}

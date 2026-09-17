@@ -613,7 +613,24 @@ export const WidmarkCalculator: React.FC = () => {
                 </div>
 
                 <div className="mt-2 text-xs text-slate-600">
-                  Theoretische Spitzen-BAK: <strong className="font-mono text-slate-900">{results.maxBacPermille.toFixed(2)} ‰</strong>
+                  Theoretische Spitzen-BAK (c_max): <strong className="font-mono text-slate-900">{results.maxBacPermille.toFixed(2)} ‰</strong>
+                </div>
+
+                {/* Clear Kinetic Equation Breakdown Badge */}
+                <div className="mt-3 flex justify-center">
+                  {results.timeKinetics.isPostPeak ? (
+                    <div className="inline-flex flex-wrap items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-950 font-mono font-semibold">
+                      <span>c(t) = {results.maxBacPermille.toFixed(2)} ‰</span>
+                      <span>−</span>
+                      <span className="text-slate-700">({profile.eliminationRate.toFixed(2)} ‰/h × {results.timeKinetics.effectiveEliminationHours.toFixed(2)} h Abbauzeit)</span>
+                      <span>=</span>
+                      <strong className="font-black text-slate-950 bg-amber-200/70 px-1.5 py-0.5 rounded">{results.currentBacPermille.toFixed(2)} ‰</strong>
+                    </div>
+                  ) : (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-950 font-semibold">
+                      <span>Anflutungsphase (t ≤ {results.timeKinetics.peakTimeFromStart.toFixed(2)} h): Resorption bis c_max noch aktiv</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -644,38 +661,74 @@ export const WidmarkCalculator: React.FC = () => {
               <div className="mt-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
                 <div className="flex items-center gap-2 text-xs font-extrabold text-slate-900 mb-1.5">
                   <Clock className="w-4 h-4 text-slate-700" />
-                  <span>Hypothetischer Modellverlauf &amp; Kinetik</span>
+                  <span>Kinetisches Zeitmodell &amp; Resorptionsphase</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Der rechnerische Abbau folgt näherungsweise einer Kinetik 0. Ordnung mit der gewählten Abbaurate von <strong className="text-slate-900 font-mono">{profile.eliminationRate.toFixed(2)} ‰/h</strong>. 
-                  Biologische Faktoren (Enzymaktivität ADH/ALDH, Magenfüllung, Dehydratation) führen in der Realität zu individuellen Abweichungen. Countdown-Angaben zur Fahrfähigkeit sind unzulässig und wissenschaftlich nicht haltbar.
+                  Die Elimination folgt einer linearen Kinetik 0. Ordnung (<strong className="text-slate-900 font-mono">{profile.eliminationRate.toFixed(2)} ‰/h</strong>), setzt rechnerisch jedoch erst <em>nach Erreichen des Resorptionsgipfels</em> (<strong className="text-slate-900 font-mono">{results.timeKinetics.peakTimeFromStart.toFixed(2)} h</strong> nach Trinkbeginn) ein. Vor dem Gipfel überwiegt die Resorption. Countdown-Angaben zur Fahrtüchtigkeit sind wissenschaftlich und rechtlich unhaltbar.
                 </p>
               </div>
 
               {/* Scientific Parameter Breakdown Table */}
               <div className="mt-6 pt-5 border-t border-slate-100 space-y-2 text-xs">
-                <div className="font-extrabold text-slate-900 mb-2">Formel-Zwischenschritte:</div>
+                <div className="font-extrabold text-slate-900 mb-2">Formel-Zwischenschritte &amp; Kinetik:</div>
                 
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Reiner Alkohol gesamt (A):</span>
+                  <span className="text-slate-600">1. Reiner Alkohol gesamt (A):</span>
                   <span className="font-mono font-bold text-slate-900">{results.pureAlcoholGrams} g</span>
                 </div>
 
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Resorptionsdefizit:</span>
+                  <span className="text-slate-600">2. Resorptionsdefizit:</span>
                   <span className="font-mono font-bold text-slate-900">-{results.resorptionDeficitPercent} % ({results.effectiveAlcoholGrams} g eff.)</span>
                 </div>
 
                 <div className="flex justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-600">Reduktionsfaktor (r):</span>
+                  <span className="text-slate-600">3. Reduktionsfaktor (r):</span>
                   <span className="font-mono font-bold text-slate-900">
                     {results.reductionFactor} ({profile.formulaType === 'watson' ? 'Watson-Modell' : 'Widmark-Klassik'})
                   </span>
                 </div>
 
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-600">4. Theoretische Spitzen-BAK (c_max):</span>
+                  <span className="font-mono font-bold text-slate-900">{results.maxBacPermille.toFixed(2)} ‰</span>
+                </div>
+
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-600">5. Zeitbezug ab Trinkbeginn:</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    {results.timeKinetics.totalElapsedHours.toFixed(1)} h ({results.timeKinetics.drinkingDurationHours} h Konsum + {results.timeKinetics.hoursSinceEnd} h seit Ende)
+                  </span>
+                </div>
+
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-600">6. Resorptionsgipfel (t_Gipfel):</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    nach {results.timeKinetics.peakTimeFromStart.toFixed(2)} h (Trinkende + {(results.timeKinetics.resorptionLagHours * 60).toFixed(0)} Min. Nachlauf)
+                  </span>
+                </div>
+
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-600">7. Effektive Abbauzeit (t_Abbau,eff):</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    {results.timeKinetics.isPostPeak 
+                      ? `${results.timeKinetics.effectiveEliminationHours.toFixed(2)} h (seit Resorptionsgipfel)`
+                      : '0,00 h (in Anflutung)'}
+                  </span>
+                </div>
+
+                <div className="flex justify-between py-1 border-b border-slate-100">
+                  <span className="text-slate-600">8. Rechnerischer Abbau (Δc = β₆₀ · t_eff):</span>
+                  <span className="font-mono font-bold text-slate-900">
+                    {results.timeKinetics.isPostPeak 
+                      ? `-${results.timeKinetics.eliminatedPermille.toFixed(2)} ‰ (${results.timeKinetics.effectiveEliminationHours.toFixed(2)} h × ${profile.eliminationRate.toFixed(2)} ‰/h)`
+                      : '0,00 ‰'}
+                  </span>
+                </div>
+
                 <div className="flex justify-between py-1">
-                  <span className="text-slate-600">Elimination pro Stunde (β₆₀):</span>
-                  <span className="font-mono font-bold text-slate-900">-{profile.eliminationRate.toFixed(2)} ‰/h</span>
+                  <span className="text-slate-900 font-bold">9. Modellierte Rest-BAK c(t):</span>
+                  <span className="font-mono font-black text-amber-700">{results.currentBacPermille.toFixed(2)} ‰</span>
                 </div>
               </div>
 
@@ -691,16 +744,23 @@ export const WidmarkCalculator: React.FC = () => {
 
             {/* Dynamic SVG Abbaukurve / Elimination Graph */}
             <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-amber-600" />
-                  <h4 className="font-bold text-slate-900 text-sm">
-                    Hypothetischer Modellverlauf (Orientierende Simulation)
-                  </h4>
+              <div className="pb-3 border-b border-slate-100 mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-amber-600" />
+                    <h4 className="font-bold text-slate-950 text-sm">
+                      Hypothetischer Modellverlauf (Orientierende Simulation)
+                    </h4>
+                  </div>
+                  <span className="text-xs text-slate-700 font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-200 shrink-0">
+                    {results.timeKinetics.isPostPeak 
+                      ? 'c(t) = c_max − β₆₀ · t_Abbau,eff'
+                      : 'Anflutungsphase (t ≤ t_Gipfel)'}
+                  </span>
                 </div>
-                <span className="text-xs text-slate-500 font-mono">
-                  c(t) = c₀ - β₆₀ · t
-                </span>
+                <p className="text-[11px] text-slate-500 mt-1">
+                  Resorptionsgipfel c_max nach {results.timeKinetics.peakTimeFromStart.toFixed(2)} h &bull; Effektive lineare Abbauzeit: {results.timeKinetics.effectiveEliminationHours.toFixed(2)} h (seit Gipfel) &bull; Abbaurate β₆₀: {profile.eliminationRate.toFixed(2)} ‰/h
+                </p>
               </div>
 
               {/* Responsive SVG Chart */}

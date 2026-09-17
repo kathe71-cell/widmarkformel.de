@@ -102,17 +102,57 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
             <section>
               <h2 className="text-lg font-black text-slate-950 mb-3 flex items-center gap-2">
                 <Radio className="w-5 h-5 text-amber-600" />
-                4. Werbedienste: Google AdSense
+                4. Werbedienste: Google AdSense &amp; Einwilligungserfordernis
               </h2>
               <p className="mb-2">
-                Auf dieser Website ist das Werbeprogramm Google AdSense eingebunden (Publisher-ID: <code>ca-pub-7078147966379221</code>). Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“).
+                Auf dieser Website ist der Werbedienst Google AdSense eingebunden (Publisher-ID: <code>ca-pub-7078147966379221</code>). Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“; Muttergesellschaft: Google LLC, Mountain View, CA, USA).
               </p>
-              <p className="mb-2 text-xs leading-relaxed text-slate-700">
-                Google AdSense verwendet Cookies und sogenannte Web Beacons (unsichtbare Grafiken), um die Schaltung von Werbeanzeigen zu steuern und das Nutzerverhalten zu analysieren. Hierbei können Daten wie Ihre IP-Adresse, Geräteinformationen und Ihr Nutzungsverhalten an Server von Google (auch in den USA) übertragen und dort gespeichert werden.
-              </p>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Rechtsgrundlage ist, soweit eine Einwilligung erteilt wurde, Art. 6 Abs. 1 lit. a DSGVO; andernfalls basiert die Auslieferung auf Art. 6 Abs. 1 lit. f DSGVO. Sie können personalisierte Werbung in den Einstellungen für Google-Werbung deaktivieren unter <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-700 underline font-semibold">https://adssettings.google.com</a>. Weitere Informationen zur Datennutzung durch Google finden Sie unter <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-amber-700 underline font-semibold">https://policies.google.com/technologies/ads</a>.
-              </p>
+              <div className="space-y-3 text-xs leading-relaxed text-slate-700">
+                <p>
+                  <strong>Rechtsgrundlagen nach TDDDG und DSGVO:</strong><br />
+                  Gemäß den geltenden europäischen und deutschen Datenschutzbestimmungen sowie der verbindlichen 
+                  <a 
+                    href="https://www.google.com/about/company/user-consent-policy/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-amber-800 underline font-semibold mx-1"
+                  >
+                    Google-Richtlinie zur Einwilligung der Nutzer in der EU (EU User Consent Policy)
+                  </a>
+                  bedarf sowohl das Speichern und Auslesen von Informationen auf Ihrem Endgerät (wie Cookies, Werbe-IDs oder Geräte-Kennungen) als auch die Erhebung und Verarbeitung personenbezogener Daten für personalisierte Werbeanzeigen Ihrer vorherigen, ausdrücklichen Einwilligung:
+                </p>
+                <ul className="list-disc list-inside space-y-1 pl-2 text-slate-600">
+                  <li>
+                    <strong>Endgerätezugriff (§ 25 Abs. 1 TDDDG):</strong> Das Setzen und Auslesen von Cookies, Werbe-IDs und vergleichbaren Identifikatoren zu Marketing- und Analysezwecken erfolgt ausschließlich auf Grundlage Ihrer ausdrücklichen Einwilligung. Ein Rückgriff auf ein pauschales berechtigtes Interesse ist für diese Endgerätezugriffe gesetzlich ausgeschlossen.
+                  </li>
+                  <li>
+                    <strong>Verarbeitung personenbezogener Daten (Art. 6 Abs. 1 lit. a DSGVO):</strong> Die Verwendung von Nutzungsdaten, Klickpfaden und Profilbildungsdaten zur Personalisierung von Werbeanzeigen und für Remarketing basiert ebenfalls ausnahmslos auf Ihrer vorherigen Einwilligung.
+                  </li>
+                </ul>
+                <p>
+                  <strong>Tatsächliche Anzeigenkonfiguration &amp; Consent-Verhalten:</strong><br />
+                  Die Aussteuerung und Erfassung von Nutzer-Einwilligungen erfolgt über eine Google-zertifizierte Consent-Management-Plattform (CMP), die den IAB Transparency &amp; Consent Framework (TCF v2.2) Standard sowie den Google Consent Mode unterstützt. 
+                  Wird keine Einwilligung erteilt oder diese verweigert, schaltet Google AdSense ausschließlich nicht-personalisierte Anzeigen (Non-Personalized Ads / NPA). In diesem Fall werden keine Werbeprofile erstellt und Werbeanzeigen lediglich kontextbezogen basierend auf dem Inhalt der besuchten Unterseite ausgewählt. Auch technisch verbleibende Kennungen für Frequency Capping, aggregierte Berichterstattung und Betrugserkennung werden streng nach den Vorgaben der Google-Richtlinien und des TDDDG behandelt.
+                </p>
+                <p>
+                  <strong>Widerruf &amp; Personalisierungseinstellungen:</strong><br />
+                  Sie können eine einmal erteilte Einwilligung jederzeit mit Wirkung für die Zukunft über unsere Cookie- bzw. Datenschutzeinstellungen widerrufen oder anpassen. Darüber hinaus können Sie die Anzeige personalisierter Google-Werbung geräteübergreifend in den Einstellungen für Werbung von Google verwalten unter{' '}
+                  <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
+                    https://adssettings.google.com
+                  </a>.
+                </p>
+                <p>
+                  <strong>Weiterführende Informationen von Google:</strong><br />
+                  Informationen darüber, wie Google Daten von Websites verwendet, auf denen Google-Dienste eingebunden sind, finden Sie unter{' '}
+                  <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
+                    https://policies.google.com/technologies/partner-sites
+                  </a>{' '}
+                  sowie in den Hinweisen zu Werbetechnologien unter{' '}
+                  <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
+                    https://policies.google.com/technologies/ads
+                  </a>. Soweit Daten in die USA übermittelt werden, stützt sich Google auf das EU-U.S. Data Privacy Framework (DPF).
+                </p>
+              </div>
             </section>
 
             {/* 6. Partner- & Affiliate-Links */}

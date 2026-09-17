@@ -27,6 +27,16 @@ export interface CalculationResult {
   effectiveAlcoholGrams: number;
   maxBacPermille: number; // Theoretische Maximal-BAK
   currentBacPermille: number; // Modellierte BAK zum Auswertungszeitpunkt
+  timeKinetics: {
+    totalElapsedHours: number;
+    drinkingDurationHours: number;
+    hoursSinceEnd: number;
+    resorptionLagHours: number;
+    peakTimeFromStart: number;
+    effectiveEliminationHours: number;
+    eliminatedPermille: number;
+    isPostPeak: boolean;
+  };
   timeSeries: { hour: number; bac: number; label: string }[];
   drivingStatus: {
     status: 'zero' | 'caution' | 'danger' | 'crime';
@@ -138,18 +148,25 @@ export function calculateWidmark(profile: UserProfile, drinks: DrinkItem[]): Cal
 
   // Modellierte BAK zum aktuellen Zeitpunkt
   let currentBacPermille = 0;
+  let effectiveEliminationHours = 0;
+  let eliminatedPermille = 0;
+  const isPostPeak = totalElapsedFromStart > peakTimeFromStart;
+
   if (maxBacPermille > 0) {
     if (totalElapsedFromStart <= peakTimeFromStart) {
-      // Anflutungs- / Resorptionsphase
+      // Anflutungs- / Resorptionsphase (t <= t_peak)
       const fraction = Math.min(1, Math.max(0, totalElapsedFromStart / peakTimeFromStart));
-      // Während des Anflutens wird bereits ein Teil abgebaut
-      const grossBac = maxBacPermille * Math.sqrt(fraction); // Typische konkave Anflutungskurve
+      const grossBac = maxBacPermille * Math.sqrt(fraction); // Konkave Anflutungskurve
       const eliminationDuringIntake = Math.max(0, (totalElapsedFromStart - 0.5) * beta60 * 0.5);
       currentBacPermille = Math.max(0, grossBac - eliminationDuringIntake);
+      effectiveEliminationHours = 0;
+      eliminatedPermille = 0;
     } else {
-      // Post-Peak Eliminationsphase
-      const hoursPastPeak = totalElapsedFromStart - peakTimeFromStart;
-      currentBacPermille = Math.max(0, maxBacPermille - (hoursPastPeak * beta60));
+      // Post-Peak Eliminationsphase (t > t_peak)
+      // Lineare Kinetik 0. Ordnung bezogen auf die effektive Abbauzeit seit dem Resorptionsgipfel
+      effectiveEliminationHours = totalElapsedFromStart - peakTimeFromStart;
+      eliminatedPermille = effectiveEliminationHours * beta60;
+      currentBacPermille = Math.max(0, maxBacPermille - eliminatedPermille);
     }
   }
 
@@ -223,6 +240,16 @@ export function calculateWidmark(profile: UserProfile, drinks: DrinkItem[]): Cal
     effectiveAlcoholGrams: Number(effectiveAlcoholGrams.toFixed(1)),
     maxBacPermille: Number(maxBacPermille.toFixed(2)),
     currentBacPermille: Number(currentBacPermille.toFixed(2)),
+    timeKinetics: {
+      totalElapsedHours: Number(totalElapsedFromStart.toFixed(2)),
+      drinkingDurationHours: profile.drinkingDurationHours,
+      hoursSinceEnd: profile.hoursSinceDrinkingEnd,
+      resorptionLagHours: postEndLag,
+      peakTimeFromStart: Number(peakTimeFromStart.toFixed(2)),
+      effectiveEliminationHours: Number(effectiveEliminationHours.toFixed(2)),
+      eliminatedPermille: Number(eliminatedPermille.toFixed(3)),
+      isPostPeak,
+    },
     timeSeries,
     drivingStatus,
   };

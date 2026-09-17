@@ -115,9 +115,25 @@ export function App() {
     }
   };
 
+  const EMBED_SNIPPET = `<iframe id="widmark-promillerechner-widget" src="https://www.widmarkformel.de/rechner-embed" width="100%" height="860" frameborder="0" style="border:none;border-radius:16px;overflow:hidden;max-width:600px;width:100%;min-height:860px;box-shadow:0 4px 20px rgba(0,0,0,0.06);display:block;" title="Widmark-Formel Promillerechner"></iframe>
+<script>
+window.addEventListener('message', function(e) {
+  if (e.origin !== 'https://www.widmarkformel.de') return;
+  var frame = document.getElementById('widmark-promillerechner-widget');
+  if (!frame || e.source !== frame.contentWindow) return;
+  if (e.data && e.data.type === 'widmark-embed-resize') {
+    var h = e.data.height;
+    if (typeof h === 'number' && h >= 400 && h <= 2500) {
+      frame.style.height = h + 'px';
+      frame.style.minHeight = h + 'px';
+    }
+  }
+});
+</script>
+<p style="font-size:12px;color:#64748b;margin-top:8px;">Bereitgestellt von <a href="https://www.widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`;
+
   const copyEmbedCode = () => {
-    const code = `<iframe src="https://www.widmarkformel.de/rechner-embed" width="100%" height="680" frameborder="0" style="border:none; border-radius:16px; overflow:hidden; max-width:600px; width:100%; box-shadow:0 4px 20px rgba(0,0,0,0.06);" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://www.widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`;
-    navigator.clipboard.writeText(code);
+    navigator.clipboard.writeText(EMBED_SNIPPET);
     setEmbedCopied(true);
     setTimeout(() => setEmbedCopied(false), 2500);
   };
@@ -182,8 +198,8 @@ export function App() {
                     <span>{embedCopied ? '✓ HTML-Code kopiert!' : 'Code kopieren'}</span>
                   </button>
                 </div>
-                <div className="mt-4 bg-slate-900 text-slate-300 p-3.5 rounded-xl font-mono text-xs overflow-x-auto select-all">
-                  <code>{`<iframe src="https://www.widmarkformel.de/rechner-embed" width="100%" height="680" frameborder="0" style="border:none;border-radius:16px;overflow:hidden;max-width:600px;width:100%;box-shadow:0 4px 20px rgba(0,0,0,0.06);" title="Widmark-Formel Promillerechner"></iframe>\n<p style="font-size:12px;color:#64748b;margin-top:6px;">Bereitgestellt von <a href="https://www.widmarkformel.de" target="_blank" rel="noopener" style="color:#b45309;text-decoration:underline;font-weight:bold;">widmarkformel.de</a></p>`}</code>
+                <div className="mt-4 bg-slate-900 text-slate-300 p-3.5 rounded-xl font-mono text-xs overflow-x-auto select-all whitespace-pre">
+                  <code>{EMBED_SNIPPET}</code>
                 </div>
               </div>
             </div>
