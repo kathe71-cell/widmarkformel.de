@@ -16,8 +16,15 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
-export function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'impressum' | 'datenschutz' | 'rechner-embed'>('home');
+export function App({ initialPath }: { initialPath?: string } = {}) {
+  const getInitialView = () => {
+    const path = (initialPath || (typeof window !== 'undefined' ? window.location.pathname : '/')).toLowerCase();
+    if (path === '/impressum' || path === '/impressum.html') return 'impressum';
+    if (path === '/datenschutz' || path === '/datenschutz.html') return 'datenschutz';
+    if (path === '/rechner-embed' || path === '/rechner-embed.html') return 'rechner-embed';
+    return 'home';
+  };
+  const [currentView, setCurrentView] = useState<'home' | 'impressum' | 'datenschutz' | 'rechner-embed'>(getInitialView);
   const [embedCopied, setEmbedCopied] = useState(false);
 
   // Handle URL path changes (e.g. /impressum, /datenschutz, /rechner-embed)
