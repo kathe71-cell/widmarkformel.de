@@ -28,5 +28,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "widmarkformel.de"
+        }
+      ],
+      "destination": "https://www.widmarkformel.de/$1",
+      "permanent": true
+    }
   ]
 }
