@@ -167,7 +167,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onScrollTo }) => {
               Anbieter &amp; Rechtliches
             </h3>
             <div className="space-y-2 text-xs text-slate-400">
-              <p className="text-slate-300 font-medium">Unabhängiges Fachportal zur Alkohol- und Promilleberechnung.<br />Kleinunternehmer nach § 19 UStG.</p>
+              <p className="text-slate-300 font-medium">Unabhängiges Fachportal zur Alkohol- und Promilleberechnung.</p>
               <p className="text-[11px] text-slate-500">Vollständige Betreiberangaben entnehmen Sie bitte dem Impressum.</p>
               
               <div className="pt-2 flex flex-wrap gap-3">
