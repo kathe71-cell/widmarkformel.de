@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, ShieldCheck, Lock, BarChart3, Radio } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Lock, BarChart3 } from 'lucide-react';
 
 interface DatenschutzProps {
   onBack: () => void;
@@ -98,114 +98,21 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
               </p>
             </section>
 
-            {/* 5. Google AdSense */}
-            <section>
-              <h2 className="text-lg font-black text-slate-950 mb-3 flex items-center gap-2">
-                <Radio className="w-5 h-5 text-amber-600" />
-                4. Werbedienste: Google AdSense, Consent-Stufen &amp; Limited Ads (LTD)
-              </h2>
-              <p className="mb-2">
-                Auf dieser Website ist der Werbedienst Google AdSense eingebunden (Publisher-ID: <code>ca-pub-7078147966379221</code>). Anbieter ist die Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland („Google“; Muttergesellschaft: Google LLC, Mountain View, CA, USA).
-              </p>
-              <div className="space-y-3 text-xs leading-relaxed text-slate-700">
-                <p>
-                  <strong>Rechtsgrundlagen nach TDDDG und DSGVO:</strong><br />
-                  Gemäß den europäischen Vorgaben (ePrivacy-Richtlinie, DSGVO) sowie der verbindlichen{' '}
-                  <a 
-                    href="https://www.google.com/about/company/user-consent-policy/" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-amber-800 underline font-semibold"
-                  >
-                    Google-Richtlinie zur Einwilligung der Nutzer in der EU (EU User Consent Policy)
-                  </a>{' '}
-                  unterscheidet das Werbesystem technisch und rechtlich drei Stufen der Anzeigenauslieferung:
-                </p>
 
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
-                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span>1. Personalisierte Anzeigen (Personalized Ads):</span>
-                  </div>
-                  <p className="text-slate-600 pl-3.5">
-                    <strong>Voraussetzung:</strong> Volle Einwilligung sowohl für den Endgerätezugriff (§ 25 Abs. 1 TDDDG) als auch für die Werbepersonalisierung (Art. 6 Abs. 1 lit. a DSGVO; TCF-Zwecke 1, 3 und 4).<br />
-                    <strong>Endgerätezugriff &amp; Funktion:</strong> Google speichert und liest Werbe-Cookies und Identifikatoren aus, um nutzerbezogene Interessenprofile zu erstellen und geräteübergreifend personalisierte Werbung auszuspielen.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
-                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                    <span>2. Nicht-personalisierte Anzeigen (NPA – Non-Personalized Ads):</span>
-                  </div>
-                  <p className="text-slate-600 pl-3.5">
-                    <strong>Wichtige Klarstellung:</strong> Nicht-personalisierte Anzeigen sind <em className="italic">nicht automatisch einwilligungsfrei</em> bezüglich des Endgerätezugriffs. Zwar werden bei NPA keine Werbeprofile erstellt und Anzeigen rein kontextbezogen ausgewählt, Google verwendet jedoch laut{' '}
-                    <a 
-                      href="https://support.google.com/adsense/answer/9007336?hl=en-GB" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-amber-800 underline font-semibold"
-                    >
-                      offizieller Google-Dokumentation zu NPA
-                    </a>{' '}
-                    weiterhin Cookies und mobile Werbe-IDs für Frequency Capping (Begrenzung der Kontakthäufigkeit), aggregierte Anzeigenberichte und Betrugsprävention. Daher setzt auch der NPA-Modus eine wirksame Einwilligung für den Endgerätezugriff (§ 25 Abs. 1 TDDDG / TCF-Zweck 1) voraus.
-                  </p>
-                </div>
-
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
-                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-slate-500"></span>
-                    <span>3. Tatsächlicher Ablehnungsfall: Eingeschränkte Anzeigen (Limited Ads – LTD):</span>
-                  </div>
-                  <p className="text-slate-600 pl-3.5">
-                    <strong>Wann aktiv:</strong> Wenn der Nutzer die Einwilligung in den Endgerätezugriff (§ 25 Abs. 1 TDDDG / TCF-Zweck 1) verweigert oder widerruft.<br />
-                    <strong>Endgerätezugriffe &amp; Technik:</strong> Gemäß den Spezifikationen für{' '}
-                    <a 
-                      href="https://support.google.com/adsense/answer/14210870?hl=en" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-amber-800 underline font-semibold"
-                    >
-                      Google Limited Ads (LTD)
-                    </a>{' '}
-                    kann Google bei verweigerter Einwilligung eingeschränkte Anzeigen ausliefern. Je nach aktivierter AdSense-Konfiguration können dabei Cookies und lokale Speicherzugriffe zur Betrugsprävention und Erkennung ungültigen Traffics (z. B. via Local Storage oder Shared Storage API) verbleiben. Eine Personalisierung der Anzeigen findet in diesem Modus nicht statt.<br />
-                    <strong>Auslieferung:</strong> Die Anzeigenauswahl erfolgt kontextbezogen auf Basis des Inhalts der besuchten Seite sowie der technisch erforderlichen IP-Adresse zur Datenübertragung. Nutzerbezogene Profilbildung und geräteübergreifendes Targeting sind im LTD-Modus deaktiviert.
-                  </p>
-                </div>
-
-                <p>
-                  <strong>Consent-Steuerung &amp; Widerruf:</strong><br />
-                  Die Erfassung und Übermittlung der Nutzereinstellungen an Google erfolgt über eine Google-zertifizierte Consent-Management-Plattform (CMP), die den IAB Transparency &amp; Consent Framework (TCF v2.2) Standard und den Google Consent Mode implementiert. Sie können Ihre Einstellungen jederzeit über den Datenschutz- / Cookie-Dialog anpassen oder eine erteilte Einwilligung mit Wirkung für die Zukunft widerrufen. Personalisierte Google-Werbung können Sie zudem zentral unter{' '}
-                  <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
-                    https://adssettings.google.com
-                  </a>{' '}
-                  verwalten.
-                </p>
-
-                <p>
-                  <strong>Datenübermittlung in Drittstaaten:</strong><br />
-                  Soweit im Rahmen der Auslieferung Daten (wie die IP-Adresse) an Server von Google LLC in den USA übermittelt werden, stützt sich Google auf das EU-U.S. Data Privacy Framework (DPF) sowie die Standardvertragsklauseln der EU-Kommission. Weiterführende Hinweise zur Datenverwendung durch Google finden Sie unter{' '}
-                  <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer" className="text-amber-800 underline font-semibold">
-                    https://policies.google.com/technologies/partner-sites
-                  </a>.
-                </p>
-              </div>
-            </section>
-
-            {/* 6. Partner- & Affiliate-Links */}
+            {/* 4. Partner- & Affiliate-Links */}
             <section>
               <h2 className="text-lg font-black text-slate-950 mb-3">
-                5. Partner- &amp; Affiliate-Links
+                4. Partner- &amp; Affiliate-Links
               </h2>
               <p className="text-xs leading-relaxed text-slate-700">
                 Auf unserer Website finden Sie gekennzeichnete Verweise zu externen Angeboten (z. B. zu zertifizierten Atemalkoholtestern). Diese Links sind mit einem Sternchen (*) gekennzeichnet. Bei einem Klick auf einen solchen Partner- bzw. Suchlink werden Sie auf die Website des jeweiligen Anbieters (z. B. Amazon.de) weitergeleitet. Erst dort kommen die jeweiligen Datenschutzbestimmungen des Anbieters zur Anwendung.
               </p>
             </section>
 
-            {/* 7. Ihre Rechte */}
+            {/* 5. Ihre Rechte */}
             <section>
               <h2 className="text-lg font-black text-slate-950 mb-3">
-                6. Ihre Rechte gemäß DSGVO
+                5. Ihre Rechte gemäß DSGVO
               </h2>
               <p className="mb-2">
                 Sie haben im Rahmen der geltenden gesetzlichen Vorschriften jederzeit folgende Rechte:
