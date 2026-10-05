@@ -57,7 +57,6 @@ export const Datenschutz: React.FC<DatenschutzProps> = ({ onBack }) => {
                 34119 Kassel<br />
                 Deutschland<br />
                 E-Mail: <a href="mailto:jens@kathe.org" className="text-amber-700 underline font-semibold">jens@kathe.org</a><br />
-                Telefon: +49 178 6652623
               </div>
             </section>
 

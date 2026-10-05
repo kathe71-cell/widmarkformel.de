@@ -53,7 +53,6 @@ export const Impressum: React.FC<ImpressumProps> = ({ onBack }) => {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4 text-slate-500" />
-                  <span>Telefon: +49 178 6652623</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4 text-slate-500" />
