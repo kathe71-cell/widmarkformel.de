@@ -213,7 +213,7 @@ export const DeviceComparison: React.FC = () => {
 
             <div className="lg:col-span-4 flex flex-col items-center sm:items-end justify-center">
               <a
-                href="https://www.amazon.de/s?k=alkoholtester+elektrochemisch+en+16280&tag=kontosofort-21"
+                href="https://www.amazon.de/s?k=alkoholtester+elektrochemisch+en+16280&tag=widmarkformel.de-21"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2 border border-amber-600 text-center"
