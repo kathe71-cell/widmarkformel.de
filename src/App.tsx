@@ -1,3 +1,4 @@
+import ProjektuebernahmePage from "./components/ProjektuebernahmePage";
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
@@ -53,13 +54,12 @@ export function App({ initialPath }: { initialPath?: string } = {}) {
     let desc = 'Wissenschaftlich fundierter Widmark-Formel Promillerechner mit Abbaukurve, Watson-Anpassung und aktuellen deutschen Grenzwerten (§ 24a StVG & StGB).';
     let canonical = 'https://www.widmarkformel.de/';
 
-    if (currentView === 'impressum') {
+    if (currentView === 'projektuebernahme' ? <ProjektuebernahmePage /> : currentView === 'impressum') {
       title = 'Impressum – Gesetzliche Anbieterkennzeichnung | widmarkformel.de';
       desc = 'Impressum und gesetzliche Anbieterkennzeichnung gemäß § 5 DDG und § 18 MStV für widmarkformel.de (Jens Kathe, Kassel).';
       canonical = 'https://www.widmarkformel.de/impressum';
     } else if (currentView === 'datenschutz') {
       title = 'Datenschutzerklärung – DSGVO-Transparenz | widmarkformel.de';
-      desc = 'Datenschutzerklärung für widmarkformel.de: Lokale Promille-Berechnung im Browser, Hosting bei Vercel, Google AdSense und Datenschutzhinweise.';
       canonical = 'https://www.widmarkformel.de/datenschutz';
     } else if (currentView === 'rechner-embed') {
       title = 'Widmark-Formel Promillerechner Widget – Kostenlos einbinden';
@@ -174,7 +174,7 @@ window.addEventListener('message', function(e) {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {currentView === 'impressum' ? (
+        {currentView === 'projektuebernahme' ? <ProjektuebernahmePage /> : currentView === 'impressum' ? (
           <Impressum onBack={() => navigate('home')} />
         ) : currentView === 'datenschutz' ? (
           <Datenschutz onBack={() => navigate('home')} />

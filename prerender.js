@@ -22,7 +22,6 @@ const routesToPrerender = [
   {
     url: '/datenschutz',
     title: 'Datenschutzerklärung – DSGVO-Transparenz | widmarkformel.de',
-    desc: 'Datenschutzerklärung für widmarkformel.de: Lokale Promille-Berechnung im Browser, Hosting bei Vercel, Google AdSense und Datenschutzhinweise.'
   },
   {
     url: '/rechner-embed',
