@@ -25,7 +25,7 @@ export function App({ initialPath }: { initialPath?: string } = {}) {
     if (path === '/rechner-embed' || path === '/rechner-embed.html') return 'rechner-embed';
     return 'home';
   };
-  const [currentView, setCurrentView] = useState<'home' | 'impressum' | 'datenschutz' | 'rechner-embed'>(getInitialView);
+  const [currentView, setCurrentView] = useState<'home' | 'impressum' | 'datenschutz' | 'rechner-embed' | 'projektuebernahme'>(getInitialView);
   const [embedCopied, setEmbedCopied] = useState(false);
 
   // Handle URL path changes (e.g. /impressum, /datenschutz, /rechner-embed)
@@ -54,7 +54,12 @@ export function App({ initialPath }: { initialPath?: string } = {}) {
     let desc = 'Wissenschaftlich fundierter Widmark-Formel Promillerechner mit Abbaukurve, Watson-Anpassung und aktuellen deutschen Grenzwerten (§ 24a StVG & StGB).';
     let canonical = 'https://www.widmarkformel.de/';
 
-    if (currentView === 'projektuebernahme' ? <ProjektuebernahmePage /> : currentView === 'impressum') {
+    if (currentView === 'projektuebernahme') {
+      title = 'Projektübernahme | widmarkformel.de';
+      canonical = 'https://www.widmarkformel.de/projektuebernahme';
+    } else
+
+    if (currentView === 'impressum') {
       title = 'Impressum – Gesetzliche Anbieterkennzeichnung | widmarkformel.de';
       desc = 'Impressum und gesetzliche Anbieterkennzeichnung gemäß § 5 DDG und § 18 MStV für widmarkformel.de (Jens Kathe, Kassel).';
       canonical = 'https://www.widmarkformel.de/impressum';
